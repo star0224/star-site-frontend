@@ -1,6 +1,8 @@
 import React, {Component} from "react";
-import {Icon, Menu} from "antd";
+import {Icon, Menu, Input} from "antd";
 import "./index.css"
+
+const { Search } = Input;
 
 class Navigation extends Component {
 
@@ -17,6 +19,8 @@ class Navigation extends Component {
                     current: 'home',
                 })
                 break;
+            case "search":
+                break;
             default:
                 this.setState({
                     current: e.key,
@@ -28,7 +32,7 @@ class Navigation extends Component {
     render() {
         return (
             <Menu onClick={this.handleClick} selectedKeys={[this.state.current]} mode="horizontal" on>
-                <Menu.Item key="logo">
+                <Menu.Item id="logoItem" key="logo">
                     <Icon id="logo" type="star" theme="twoTone" />
                 </Menu.Item>
                 <Menu.Item key="home">
@@ -45,6 +49,9 @@ class Navigation extends Component {
                 </Menu.Item>
                 <Menu.Item key="statistics">
                     统计
+                </Menu.Item>
+                <Menu.Item id="searchMenu" key="search">
+                    <Search id="search" enterButton onSearch={value => console.log(value)}/>
                 </Menu.Item>
             </Menu>
         );

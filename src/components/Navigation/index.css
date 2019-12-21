@@ -1,14 +1,31 @@
 #logo {
-    transition: all 0.2s ease-in-out;
-    -webkit-transition: all 0.2s ease-in-out;
-    -moz-transition: all 0.2s ease-in-out;
-    -o-transition: all 0.2s ease-in-out;
+    margin: 0px;
 }
 
-#logo:hover {
-    transform: rotate(180deg);
-    -webkit-transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    -o-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
+#logoItem {
+    color: #ffffff00;
+    border-bottom: 2px solid #ffffff00;
+    transition: all 0.2s ease-in-out;
 }
+
+#logoItem:hover {
+    transform: rotate(180deg);
+
+}
+
+#searchMenu {
+    color: #ffffff00;
+    border-bottom: 2px solid #ffffff00;
+    cursor: default;
+    float: right;
+}
+
+#searchMenu > span {
+    vertical-align: middle;
+}
+
+#searchMenu > span > span > span > button > i {
+    margin: 0px;
+}
+
+
