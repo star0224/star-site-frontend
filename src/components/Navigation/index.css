@@ -1,3 +1,58 @@
+.halfTransparent {
+    background-color: #ffffff !important;
+}
+
+.transparent {
+    background-color: #ffffff00 !important;
+    border-bottom: 1px solid #e8e8e800 !important;
+}
+
+.transparent #searchMenu > span > span > span > button {
+    background-color: #1890ff00 !important;
+    border-color: #1890ff00 !important;
+}
+
+.transparent #searchMenu > span > span > span > button > i > svg {
+    color: #666;
+}
+
+.transparent > li {
+    border: 1px solid #00000000 !important;
+    color: black !important;
+}
+
+.transparent > li > a {
+    color: #666 !important;
+}
+
+.transparent #searchMenu > span > span > span {
+    background-color: #fafafa00;
+}
+
+.transparent #logo > svg > path:first-child {
+    fill: #fff0 !important;
+}
+
+.transparent #logo > svg > path:last-child {
+    fill: #666 !important;
+}
+
+.transparent #search {
+    background-color: #ffffff00;
+    border: 1px solid #ffffff00;
+}
+
+#menu {
+    top: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 9999;
+}
+
+#menu:hover {
+    background-color: #ffffff !important;
+}
+
 #logo {
     margin: 0px;
 }

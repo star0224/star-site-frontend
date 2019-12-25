@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {Component} from 'react';
 import './App.css';
-import {Navigation} from "./components";
 import 'antd/dist/antd.css';
 
-function App() {
-    return (
-        <Navigation/>
-    );
+class App extends Component {
+    render() {
+        return (
+            <div id="app">
+                {this.props.children}
+            </div>
+        );
+    }
 }
 
 export default App;

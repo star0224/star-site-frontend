@@ -1,0 +1,48 @@
+#home {
+    margin-top: 100%;
+    position: absolute;
+    height: 100%;
+}
+
+#background {
+    background-image: url("../../assets/background.jpg");
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: top center;
+    background-attachment: fixed;
+    z-index: -9999;
+}
+
+#background:before {
+    /*background-image: url(https://cdn.jsdelivr.net/gh/moezx/cdn@3.1.9/img/Sakura/images/grid.png);*/
+    background-image: url("../../assets/bk_cover.png");
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    width: 100%;
+    background-attachment: fixed;
+}
+
+#focusinfo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#hometitle {
+    border: 1px solid #000000;
+    padding: 10px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 10px;
+}
