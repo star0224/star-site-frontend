@@ -1,0 +1,10 @@
+#progressBar {
+    z-index: 999;
+    position: fixed;
+    top: -14px;
+    margin: 0px;
+}
+
+#progressBar > div > div > div {
+    background-color: rgba(0, 0, 0, 0);
+}

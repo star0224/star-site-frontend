@@ -6,7 +6,7 @@ class NoMatch extends Component {
     render() {
         return (
             <div>
-                <Navigation />
+                <Navigation current="category" />
                 <div id="nomatch">
                     404 Not Found.
                 </div>

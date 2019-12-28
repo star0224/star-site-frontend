@@ -7,10 +7,12 @@ const {Search} = Input;
 
 class Navigation extends Component {
 
-    state = {
-        current: "home",
+    constructor(props) {
+        super(props);
+        this.state = {
+            current: props.current
+        }
     }
-
 
     handleClick = e => {
 
@@ -20,21 +22,15 @@ class Navigation extends Component {
                     current: 'home',
                 })
                 break;
-            case "search":
-                break;
             default:
-                this.setState({
-                    current: e.key,
-                })
-                console.log("click", e);
                 break;
         }
     }
 
     componentDidMount() {
-        if (this.state.current = 'home') {
-            const menu = document.getElementById("menu")
-            const menuClasses = menu.classList
+        const menu = document.getElementById("menu")
+        const menuClasses = menu.classList
+        if (this.state.current === 'home') {
             window.addEventListener('scroll', function () {
                 if (document.documentElement.scrollTop >= 1) {
                     menuClasses.add("halfTransparent")
@@ -42,7 +38,6 @@ class Navigation extends Component {
                 } else {
                     menuClasses.add("transparent")
                     menuClasses.remove("halfTransparent")
-
                 }
             }, false)
 
@@ -60,39 +55,44 @@ class Navigation extends Component {
                     menuClasses.add("transparent")
                 }
             }
+        } else {
+            if (menuClasses.contains('transparent')) {
+                menuClasses.remove("transparent")
+            }
+            menuClasses.add("halfTransparent")
         }
     }
 
     render() {
         return (
             <Menu id="menu" className="transparent" onClick={this.handleClick} selectedKeys={[this.state.current]}
-                  mode="horizontal" on>
+                  mode="horizontal">
                 <Menu.Item id="logoItem" key="logo">
                     <NavLink to="/">
                         <Icon id="logo" type="star" theme="twoTone"/>
                     </NavLink>
                 </Menu.Item>
-                <Menu.Item key="/" title="首页">
+                <Menu.Item key="home" title="首页">
                     <NavLink to="/">
                         首页
                     </NavLink>
                 </Menu.Item>
-                <Menu.Item key="/category">
+                <Menu.Item key="category">
                     <NavLink to="/category">
                         分类
                     </NavLink>
                 </Menu.Item>
-                <Menu.Item key="/archive">
+                <Menu.Item key="archive">
                     <NavLink to="/archive">
                         归档
                     </NavLink>
                 </Menu.Item>
-                <Menu.Item key="/message">
+                <Menu.Item key="message">
                     <NavLink to="/message">
                         留言
                     </NavLink>
                 </Menu.Item>
-                <Menu.Item key="/statistics">
+                <Menu.Item key="statistics">
                     <NavLink to="/statistics">
                         统计
                     </NavLink>
@@ -104,8 +104,5 @@ class Navigation extends Component {
         );
     }
 }
-
-
-console.log("hello")
 
 export default Navigation;

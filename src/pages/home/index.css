@@ -1,11 +1,5 @@
-#home {
-    margin-top: 100%;
-    position: absolute;
-    height: 100%;
-}
-
 #background {
-    background-image: url("../../assets/background.jpg");
+    background-image: url("../../assets/ionia-the-first-lands.jpg");
     position: absolute;
     left: 0;
     right: 0;
@@ -19,7 +13,6 @@
 }
 
 #background:before {
-    /*background-image: url(https://cdn.jsdelivr.net/gh/moezx/cdn@3.1.9/img/Sakura/images/grid.png);*/
     background-image: url("../../assets/bk_cover.png");
     content: '';
     position: absolute;
@@ -32,17 +25,58 @@
     background-attachment: fixed;
 }
 
-#focusinfo {
+#blurBox {
     position: absolute;
+    background-color: rgba(0, 0, 0, 0.3);
+    width: 100%;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    z-index: 10;
+    color: white;
+    padding: 24px;
 }
 
-#hometitle {
-    border: 1px solid #000000;
-    padding: 10px;
-    line-height: 30px;
+#blurBox > p:first-child {
+    margin: 0px;
+}
+
+#blurBox > p:nth-child(2) {
+    margin-bottom: 5px;
+}
+
+#blurBox > p:last-child > button {
+    margin-right: 10px;
+}
+
+#blurBoxTitle {
+    color: white;
+    margin-top: 5px;
+    margin-bottom: 15px;
+}
+
+#content {
+    margin-top: 30px;
+    padding: 20px;
+    position: absolute;
+    top: 100%;
+    width: 100%;
+}
+
+#archives {
+    padding: 30px;
+}
+
+#essay {
+    padding: 30px;
+}
+
+#essay > h3 > i {
+    margin-right: 7px;
+}
+
+#archives > h3 > i {
+    margin-right: 7px;
+}
+
+#archivesList > div:nth-child(2){
     text-align: center;
-    border-radius: 10px;
 }
