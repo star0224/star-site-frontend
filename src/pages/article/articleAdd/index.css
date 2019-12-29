@@ -1,0 +1,17 @@
+#addArticle {
+    float: right;
+    width: 85vw;
+    display: flex;
+    /*align-items: center;*/
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px;
+}
+
+#articleTitle {
+    margin-bottom: 20px;
+}
+
+#tags {
+    margin-bottom: 20px;
+}

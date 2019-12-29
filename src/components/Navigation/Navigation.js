@@ -92,9 +92,9 @@ class Navigation extends Component {
                         留言
                     </NavLink>
                 </Menu.Item>
-                <Menu.Item key="statistics">
-                    <NavLink to="/statistics">
-                        统计
+                <Menu.Item key="bk">
+                    <NavLink to="/bk">
+                        后台
                     </NavLink>
                 </Menu.Item>
                 <Menu.Item id="searchMenu" key="search">

@@ -95,33 +95,8 @@ class Home extends Component {
                                     Discovery
                                 </h3>
                                 <Divider dashed/>
-                                <List
-                                    id="archivesList"
-                                    itemLayout="vertical"
-                                    size="large"
-                                    pagination={{
-                                        onChange: page => {
-                                            console.log(page);
-                                        },
-                                        pageSize: 3,
-                                    }}
-                                    dataSource={listData}
-                                    renderItem={item => (
-                                        <List.Item
-                                            key={item.title}
-                                            actions={[
-                                                <IconText type="like-o" text="156" key="list-vertical-like-o"/>,
-                                                <IconText type="message" text="2" key="list-vertical-message"/>,
-                                            ]}
-                                        >
-                                            <List.Item.Meta
-                                                title={<a href={item.href}>{item.title}</a>}
-                                                description={item.description}
-                                            />
-                                            {item.content}
-                                        </List.Item>
-                                    )}
-                                />,
+
+                                ,
                             </div>
                         </Col>
                         <Col span={10}>

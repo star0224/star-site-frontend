@@ -1,0 +1,9 @@
+#navigation_bk {
+    height: 100%;
+    position: fixed;
+}
+
+#navigation_bk > li:first-child  {
+    background-color: white;
+    border-right: 1px solid #e8e8e8 !important;
+}

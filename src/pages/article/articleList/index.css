@@ -1,0 +1,17 @@
+#listArticle {
+    float: right;
+    width: 85vw;
+    display: flex;
+    /*align-items: center;*/
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px;
+}
+
+#articleList {
+    height: 100vh
+}
+
+#articleList > div:nth-child(2){
+    text-align: center;
+}
