@@ -4,35 +4,34 @@ import './index.css'
 import axios from 'axios'
 import {Button, Col, Divider, Icon, List, Row} from "antd";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
+import {NavLink} from "react-router-dom";
 
 class Home extends Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            archives: []
+            archives: [],
+            essays: []
         }
     }
 
     componentDidMount() {
         const _this = this
-        axios.get("http://localhost:8080/getArchiveInfo")
-            .then(response => {
+        axios.get(global.constants.server + "/article/list?category=0")
+            .then(res => {
                 _this.setState({
-                    archives: response.data
+                    archives: JSON.parse(res.data)
                 })
-            }).catch(error => {
-            console.log(error)
-            _this.setState({
-                archives: [
-                    {
-                        date: '2019-07-10',
-                        info: '1'
-                    }
-                ]
-            })
-        })
+            }).catch(e => console.log(e))
+        axios.get(global.constants.server + "/article/list?category=1")
+            .then(res => {
+                _this.setState({
+                    essays: JSON.parse(res.data)
+                })
+            }).catch(e => console.log(e))
     }
+
 
     render() {
 
@@ -42,34 +41,6 @@ class Home extends Component {
                 {text}
             </span>
         );
-
-        const listData = [];
-        for (let i = 0; i < 100; i++) {
-            listData.push({
-                href: 'http://ant.design',
-                title: `ant design part ${i}`,
-                avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-                description:
-                    'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-                content:
-                    'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-            });
-        }
-
-        const data = [
-            {
-                title: 'Ant Design Title 1',
-            },
-            {
-                title: 'Ant Design Title 2',
-            },
-            {
-                title: 'Ant Design Title 3',
-            },
-            {
-                title: 'Ant Design Title 4',
-            },
-        ];
 
         return (
             <div>
@@ -92,15 +63,38 @@ class Home extends Component {
                             <div id="archives">
                                 <h3>
                                     <Icon type="rocket"/>
-                                    Discovery
+                                    Archives
                                 </h3>
                                 <Divider dashed/>
-
-                                ,
+                                <List
+                                    id="archivesList"
+                                    itemLayout="vertical"
+                                    size="large"
+                                    pagination={{
+                                        onChange: page => {
+                                            console.log(page);
+                                        },
+                                        pageSize: 3,
+                                    }}
+                                    dataSource={this.state.archives}
+                                    renderItem={item => (
+                                        <List.Item
+                                            key={item.title}
+                                            actions={[
+                                                <IconText type="like-o" text="156" key="like" />,
+                                                <IconText type="message" text="2" key="message" />,
+                                            ]}
+                                        >
+                                            <List.Item.Meta
+                                                title={<NavLink to={"/article" + item.id}>{item.title}</NavLink>}/>
+                                            {item.content}
+                                        </List.Item>
+                                    )}
+                                />,
                             </div>
                         </Col>
                         <Col span={10}>
-                            <div id="essay">
+                            <div id="essays">
                                 <h3>
                                     <Icon type="like"/>
                                     Essay
@@ -108,12 +102,11 @@ class Home extends Component {
                                 <Divider dashed/>
                                 <List
                                     itemLayout="horizontal"
-                                    dataSource={data}
+                                    dataSource={this.state.essays}
                                     renderItem={item => (
                                         <List.Item>
                                             <List.Item.Meta
                                                 title={<a href="https://ant.design">{item.title}</a>}
-                                                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
                                             />
                                         </List.Item>
                                     )}

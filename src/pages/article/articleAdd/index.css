@@ -2,7 +2,6 @@
     float: right;
     width: 85vw;
     display: flex;
-    /*align-items: center;*/
     flex-direction: column;
     justify-content: center;
     padding: 30px;
@@ -14,4 +13,13 @@
 
 #tags {
     margin-bottom: 20px;
+}
+
+#saveButton {
+    text-align: center;
+    margin-top: 30px;
+}
+
+#saveButton > button:first-child {
+    margin-right: 30px;
 }

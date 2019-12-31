@@ -1,35 +1,39 @@
-import React, {Component} from 'react';
-import NavigationBack from "../../../components/Navigation_Back/NavigationBack";
-import {Icon, List} from "antd";
+import React, {Component} from 'react'
+import NavigationBack from "../../../components/Navigation_Back/NavigationBack"
+import {Input, List} from "antd"
 import './index.css'
+import {NavLink} from "react-router-dom"
+import axios from "axios"
+
+const {Search} = Input;
 
 class ArticleList extends Component {
 
-    render() {
-        const IconText = ({type, text}) => (
-            <span>
-                <Icon type={type} style={{marginRight: 8}}/>
-                {text}
-            </span>
-        );
-
-        const listData = [];
-        for (let i = 0; i < 100; i++) {
-            listData.push({
-                href: 'http://ant.design',
-                title: `ant design part ${i}`,
-                description:
-                    'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-                content:
-                    'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-            });
+    constructor(props) {
+        super(props);
+        this.state = {
+            articleList: []
         }
+    }
+
+
+    componentDidMount() {
+        axios.get(global.constants.server + "/article/list")
+            .then(res => {
+                this.setState({
+                    articleList: JSON.parse(res.data)
+                })
+            })
+    }
+
+    render() {
 
         return (
             <div>
                 <NavigationBack selectedKeys="article_list" openKeys="article"/>
 
                 <div id="listArticle">
+                    <Search onSearch={value => console.log(value)} enterButton/>
                     <List
                         id="articleList"
                         itemLayout="horizontal"
@@ -40,13 +44,13 @@ class ArticleList extends Component {
                             },
                             pageSize: 10,
                         }}
-                        dataSource={listData}
+                        dataSource={this.state.articleList}
                         renderItem={item => (
                             <List.Item
                                 actions={[<a key="list-edit">edit</a>,
                                     <a key="list-del">del</a>]}>
                                 <List.Item.Meta
-                                    title={<a href={item.href}>{item.title}</a>}/>
+                                    title={<NavLink to={"/bk/article" + item.id}>{item.title}</NavLink>}/>
                             </List.Item>
                         )}/>
                 </div>

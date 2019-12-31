@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
-import NavigationBack from "../../../components/Navigation_Back/NavigationBack";
-import MdEditor from "for-editor";
+import React, {Component} from 'react'
+import NavigationBack from "../../../components/Navigation_Back/NavigationBack"
+import MdEditor from "for-editor"
 import $ from 'jquery'
 import './index.css'
-import {Icon, Input, Tag, Tooltip} from "antd";
+import {Button, Icon, Input, Tag, Tooltip} from "antd"
+import axios from "axios"
 
 class ArticleAdd extends Component {
     constructor(props) {
@@ -18,7 +19,6 @@ class ArticleAdd extends Component {
     }
 
     componentDidMount() {
-        console.log($(document).height())
         this.setState({
             width: $(window).width() - $('#navigation_bk').width()
         })
@@ -52,7 +52,6 @@ class ArticleAdd extends Component {
         if (inputValue && tags.indexOf(inputValue) === -1) {
             tags = [...tags, inputValue];
         }
-        console.log(tags);
         this.setState({
             tags,
             inputVisible: false,
@@ -62,6 +61,20 @@ class ArticleAdd extends Component {
 
     saveInputRef = input => (this.input = input);
 
+    // 保存事件
+    saveArticle = () => {
+        let data = {
+            "title": $("#articleTitle").val(),
+            "content": this.state.value,
+            "tags": this.state.tags,
+            "category": "0"
+        }
+        axios.post(global.constants.server + '/article/add', data)
+            .then(res => {
+                console.log(res)
+            })
+    }
+
     render() {
         return (
             <div>
@@ -69,6 +82,7 @@ class ArticleAdd extends Component {
                 <div id="addArticle">
                     <Input
                         id="articleTitle"
+                        autocomplete="off"
                         placeholder="输入文章标题" allowClear/>
                     <div id="tags">
                         <span>文章标签：</span>
@@ -108,7 +122,11 @@ class ArticleAdd extends Component {
                     <MdEditor
                         style={{height: '500px'}}
                         value={this.state.value} placeholder=" "
-                        onChange={() => this.handleChange()}/>
+                        onChange={value => this.handleChange(value)}/>
+                    <div id="saveButton">
+                        <Button type="primary" onClick={this.saveArticle}>保存</Button>
+                        <Button type="primary">保存并发布</Button>
+                    </div>
                 </div>
             </div>
         );
