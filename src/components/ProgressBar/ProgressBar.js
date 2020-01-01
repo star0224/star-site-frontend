@@ -7,19 +7,15 @@ class ProgressBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            percent: 0
+            percent: 0,
         }
     }
 
     componentDidMount() {
         const _this = this
-        let percent = $(window).scrollTop() / ($(document).height() - $(window).height()) * 100
-        percent = percent < 99.9 ? percent : 100
-        _this.setState({
-            percent: percent
-        })
         window.addEventListener('scroll', () => {
             let percent = $(window).scrollTop() / ($(document).height() - $(window).height()) * 100
+            // 适配进度条滚到底还不是100%
             percent = percent < 99.9 ? percent : 100
             _this.setState({
                 percent: percent

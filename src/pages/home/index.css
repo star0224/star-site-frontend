@@ -54,29 +54,69 @@
 }
 
 #content {
-    margin-top: 30px;
     padding: 20px;
     position: absolute;
     top: 100%;
     width: 100%;
+    background-color: #f9f9f9;
 }
 
 #archives {
     padding: 30px;
+    background-color: #ffffff;
+    margin-top: 50px;
+    border-radius: 25px;
+}
+
+#archives > div:nth-child(2) {
+    margin-bottom: 0px;
+}
+
+#archives > div:nth-child(3) > div > div > ul > li > div {
+    margin-bottom: 0px;
+}
+
+#archives > div:nth-child(3) > div > div > ul > li {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#archives > div:nth-child(3) > div > div > ul > li > div > div > div > div > span {
+    margin-right: 20px;
+}
+
+#archives > div:nth-child(3) > div > div > ul > li > div > div > div > div {
+    margin-bottom: 10px;
 }
 
 #essays {
     padding: 30px;
+    background-color: #ffffff;
+    margin-top: 50px;
+    border-radius: 25px;
 }
 
 #essays > h3 > i {
     margin-right: 7px;
 }
 
+#essays > div:nth-child(2) {
+    margin-bottom: 10px;
+}
+
+#essays > div:nth-child(3) > div > div > ul > li > div {
+    margin-bottom: 10px;
+}
+
+#essays > div:nth-child(3) > div > div > ul > li {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 #archives > h3 > i {
     margin-right: 7px;
 }
 
-#archivesList > div:nth-child(2){
-    text-align: center;
-}
+

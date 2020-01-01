@@ -50,7 +50,7 @@ class ArticleList extends Component {
                                 actions={[<a key="list-edit">edit</a>,
                                     <a key="list-del">del</a>]}>
                                 <List.Item.Meta
-                                    title={<NavLink to={"/bk/article" + item.id}>{item.title}</NavLink>}/>
+                                    title={<NavLink to={"/article/" + item.id}>{item.title}</NavLink>}/>
                             </List.Item>
                         )}/>
                 </div>

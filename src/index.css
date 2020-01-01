@@ -1,5 +1,5 @@
 body, html {
-    height: 100%;
+    height: auto !important;
     padding: 0px;
     margin: 0px;
     overflow-y: scroll;

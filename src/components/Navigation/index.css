@@ -43,7 +43,7 @@
 }
 
 #menu {
-    top: 0;
+    top: 0.05%;
     position: fixed;
     width: 100%;
     z-index: 900;
