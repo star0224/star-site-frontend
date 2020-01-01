@@ -87,11 +87,6 @@ class Navigation extends Component {
                         归档
                     </NavLink>
                 </Menu.Item>
-                <Menu.Item key="message">
-                    <NavLink to="/message">
-                        留言
-                    </NavLink>
-                </Menu.Item>
                 <Menu.Item key="bk">
                     <NavLink to="/bk">
                         后台

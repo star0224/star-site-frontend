@@ -90,6 +90,10 @@
     margin-bottom: 10px;
 }
 
+#archives > div:nth-child(3) > div:nth-child(2)  {
+    text-align: center;
+}
+
 #essays {
     padding: 30px;
     background-color: #ffffff;
@@ -118,5 +122,4 @@
 #archives > h3 > i {
     margin-right: 7px;
 }
-
 

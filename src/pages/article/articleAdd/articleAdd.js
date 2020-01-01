@@ -67,7 +67,10 @@ class ArticleAdd extends Component {
             "title": $("#articleTitle").val(),
             "content": this.state.value,
             "tags": this.state.tags,
-            "category": "0"
+            "isTop": 0,
+            "category": {
+                "name": "未分类"
+            }
         }
         axios.post(global.constants.server + '/article/add', data)
             .then(res => {

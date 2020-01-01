@@ -5,6 +5,7 @@ import axios from 'axios'
 import {BackTop, Button, Col, Divider, Icon, List, Row} from "antd";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import {NavLink} from "react-router-dom";
+import Footer from "../../components/Footer/Footer";
 
 class Home extends Component {
 
@@ -13,23 +14,7 @@ class Home extends Component {
         this.state = {
             archives: [],
             essays: [],
-            categories: [
-                {
-                    category: 'Java'
-                },
-                {
-                    category: 'Kotlin'
-                },
-                {
-                    category: 'Scala'
-                },
-                {
-                    category: 'Spark'
-                },
-                {
-                    category: 'Flink'
-                },
-            ]
+            categories: []
         }
     }
 
@@ -41,6 +26,12 @@ class Home extends Component {
                     archives: JSON.parse(res.data),
                 })
             }).catch(e => console.log(e))
+        axios.get(global.constants.server + "/article/category/list")
+            .then(res => {
+                this.setState({
+                    categories: JSON.parse(res.data)
+                })
+            })
     }
 
 
@@ -125,7 +116,8 @@ class Home extends Component {
                                     dataSource={this.state.categories}
                                     renderItem={item => (
                                         <List.Item>
-                                            <NavLink to={"/category/" + item.category} style={{color: 'rgba(0, 0, 0, 0.65)'}}>
+                                            <NavLink to={"/category/" + item.category}
+                                                     style={{color: 'rgba(0, 0, 0, 0.65)'}}>
                                                 <IconText type="folder" text={item.category}/>
                                             </NavLink>
                                         </List.Item>
@@ -135,6 +127,9 @@ class Home extends Component {
                         </Col>
                         <Col span={3}>
                         </Col>
+                    </Row>
+                    <Row>
+                        <Footer/>
                     </Row>
                 </div>
             </div>
