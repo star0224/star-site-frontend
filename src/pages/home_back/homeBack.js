@@ -6,7 +6,7 @@ class HomeBack extends Component {
     render() {
         return (
             <div>
-                <NavigationBack openKeys="article"/>
+                <NavigationBack/>
             </div>
         );
     }

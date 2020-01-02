@@ -1,0 +1,12 @@
+#categoryList > div:nth-child(2) {
+    margin-top: 0px;
+}
+
+#categoryList > div:nth-child(2) > div > div:nth-child(2) > div > div > div > ul {
+    float: none;
+    text-align: center;
+}
+
+#categoryList {
+    height: 100vh;
+}

@@ -7,6 +7,9 @@ import ArticleAdd from "./pages/article/articleAdd/articleAdd";
 import ArticleList from "./pages/article/articleList/articleList";
 import ArticleInfo from "./components/ArticleInfo/ArticleInfo";
 import NoMatch from "./pages/404/noMatch";
+import CategoryAddBack from "./pages/categoryBack/categoryAddBack/categoryAddBack";
+import CategoryListBack from "./pages/categoryBack/categoryListBack/categoryListBack";
+import CategoryList from "./pages/categoryList/categoryList";
 
 
 class Router extends Component {
@@ -18,15 +21,19 @@ class Router extends Component {
                 <App>
                     <Switch>
                         <Route exact path="/" component={Home}/>
+                        <Route path="/category/list" component={CategoryList}/>
+                        <Route path="/category/:id" component={CategoryList}/>
                         <Route exact path="/bk" component={HomeBack}/>
                         <Route path="/bk/article/add" component={ArticleAdd}/>
                         <Route path="/bk/article/list" component={ArticleList}/>
                         <Route path="/article/:id" component={ArticleInfo}/>
+                        <Route path="/bk/category/add" component={CategoryAddBack} />
+                        <Route path="/bk/category/list" component={CategoryListBack} />
                         <Route component={NoMatch}/>
                     </Switch>
                 </App>
             </HashRouter>
-        );
+        )
     }
 }
 

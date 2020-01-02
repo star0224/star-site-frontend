@@ -78,7 +78,7 @@ class Navigation extends Component {
                     </NavLink>
                 </Menu.Item>
                 <Menu.Item key="category">
-                    <NavLink to="/category">
+                    <NavLink to="/category/list">
                         分类
                     </NavLink>
                 </Menu.Item>

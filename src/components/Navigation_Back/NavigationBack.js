@@ -40,12 +40,29 @@ class NavigationBack extends Component {
                 }>
                     <Menu.Item key="article_list">
                         <NavLink to="/bk/article/list">
-                            List 列表
+                            Article List 列表
                         </NavLink>
                     </Menu.Item>
                     <Menu.Item key="article_add" title="Add 增加">
                         <NavLink to="/bk/article/add">
-                            Add 增加
+                            Article Add 增加
+                        </NavLink>
+                    </Menu.Item>
+                </SubMenu>
+                <SubMenu key="category" title={
+                    <span>
+                        <Icon type="folder-open"/>
+                        <span>分类</span>
+                    </span>
+                }>
+                    <Menu.Item key="category_list">
+                        <NavLink to="/bk/category/list">
+                            Category List 列表
+                        </NavLink>
+                    </Menu.Item>
+                    <Menu.Item key="category_add" title="Add 增加">
+                        <NavLink to="/bk/category/add">
+                            Category Add 增加
                         </NavLink>
                     </Menu.Item>
                 </SubMenu>

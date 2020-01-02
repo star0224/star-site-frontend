@@ -1,0 +1,209 @@
+import React, {Component} from 'react';
+import {Col, Menu, Row, Table, Divider, Icon, Modal, notification} from "antd";
+import axios from 'axios'
+import {NavLink} from "react-router-dom";
+
+class Category extends Component {
+
+    constructor(props) {
+        super(props);
+        console.log(props.categorySelectedKeys)
+        this.state = {
+            categorySelectedKeys: props.categorySelectedKeys,
+            categoryList: [],
+            articleList: [],
+            isBackStage: props.isBackStage,
+            confirmLoading: false,
+            visible: false,
+            deleteId: ""
+        }
+    }
+
+    componentDidMount() {
+        const _this = this
+        axios.get(global.constants.server + "/article/category/list")
+            .then((res) => {
+                _this.setState({
+                    categoryList: JSON.parse(res.data)
+                })
+            }).catch(e => {
+            notification.open({
+                message: '请求失败',
+                description: '错误信息：' + e,
+            });
+        })
+        if (this.state.categorySelectedKeys !== "all_category") {
+            axios.get(global.constants.server + "/article/category/?categoryId=" + this.state.categorySelectedKeys)
+                .then((res) => {
+                    _this.setState({
+                        articleList: JSON.parse(res.data)
+                    })
+                }).catch(e => {
+                notification.open({
+                    message: '请求失败',
+                    description: '错误信息：' + e,
+                });
+            })
+        } else {
+            axios.get(global.constants.server + "/article/list")
+                .then((res) => {
+                    _this.setState({
+                        articleList: JSON.parse(res.data)
+                    })
+                }).catch(e => {
+                notification.open({
+                    message: '请求失败',
+                    description: '错误信息：' + e,
+                });
+            })
+        }
+    }
+
+    handleClick = (e) => {
+        const _this = this
+        console.log(e.key)
+        switch (e.key) {
+            case 'all_category':
+                axios.get(global.constants.server + "/article/list")
+                    .then((res) => {
+                        _this.setState({
+                            articleList: JSON.parse(res.data)
+                        })
+                    }).catch(e => {
+                    notification.open({
+                        message: '请求失败',
+                        description: '错误信息：' + e,
+                    });
+                })
+                break
+            default:
+                axios.get(global.constants.server + "/article/category/?categoryId=" + e.key)
+                    .then((res) => {
+                        _this.setState({
+                            articleList: JSON.parse(res.data)
+                        })
+                    }).catch(e => {
+                    notification.open({
+                        message: '请求失败',
+                        description: '错误信息：' + e,
+                    });
+                })
+                break
+        }
+    }
+
+    // 提示框，确认是否删除
+    handleCancel = () => {
+        this.setState({
+            visible: false
+        })
+    }
+
+    handleOk = () => {
+        this.setState({
+            confirmLoading: true
+        })
+        setTimeout(() => {
+            this.setState({
+                visible: false,
+                confirmLoading: false
+            })
+        }, 2000)
+    }
+
+
+    render() {
+
+        const IconText = ({type, text}) => (
+            <span>
+                <Icon type={type} style={{marginRight: 8}}/>
+                {text}
+            </span>
+        );
+
+
+        const columns = [
+            {
+                title: 'Title',
+                dataIndex: 'title',
+                key: 'title',
+                width: '50%',
+                render: (text, record) => <NavLink to={"/article/" + record.id}>{text}</NavLink>
+            }, {
+                title: 'Date',
+                dataIndex: 'date',
+                align: 'center',
+                width: '25%',
+                key: 'date',
+                render: text => <IconText type="calendar" text={text} key="calendar"/>
+
+            }, {
+                title: 'Views',
+                dataIndex: 'views',
+                key: 'views',
+                width: '25%',
+                align: 'center',
+                render: text => <IconText type="eye" text={text + " Views"} key="views"/>
+            }
+        ];
+
+        return (
+            <Row>
+                <Modal
+                    title="Warning"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    confirmLoading={this.state.confirmLoading}
+                    onCancel={this.handleCancel}
+                >
+                    <p>确认是否删除</p>
+                </Modal>
+                <Col span={4}>
+                    <Menu
+                        onClick={this.handleClick}
+                        style={{paddingTop: '5px'}}
+                        defaultSelectedKeys={[this.state.categorySelectedKeys]}
+                        mode="inline">
+                        <Menu.Item key="all_category">
+                            全部分类
+                        </Menu.Item>
+                        <Divider style={{margin: "10px 0px 10px 0px"}}/>
+                        {this.state.categoryList.map(item => {
+                            if (this.state.isBackStage) {
+                                return (
+                                    <Menu.Item key={item.id}>
+                                        {item.name}
+                                        <Icon type="close-circle" style={{
+                                            float: 'right',
+                                            position: 'relative',
+                                            top: '50%',
+                                            transform: 'translateY(-50%)'
+                                        }}
+                                              onClick={e => {
+                                                  this.setState({
+                                                      visible: true,
+                                                      deleteId: item.id
+                                                  })
+                                              }}
+                                        />
+                                    </Menu.Item>
+                                )
+                            } else {
+                                return (
+                                    <Menu.Item key={item.id}>
+                                        {item.name}
+                                    </Menu.Item>
+                                )
+                            }
+                        })}
+                    </Menu>
+                </Col>
+                <Col span={20}>
+                    <Table columns={columns} dataSource={this.state.articleList}/>
+                </Col>
+            </Row>
+        );
+    }
+}
+
+export default Category;

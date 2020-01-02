@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './index.css'
 import axios from 'axios'
-import {BackTop, Button, Col, Divider, Icon, Row} from "antd";
+import {BackTop, Button, Col, Divider, Icon, notification, Row} from "antd";
 import ReactMarkdown from "react-markdown";
 import ProgressBar from "../ProgressBar/ProgressBar";
 import {NavLink} from "react-router-dom";
@@ -12,7 +12,9 @@ class ArticleInfo extends Component {
         super(props)
         this.state = {
             id: props.match.params.id,
-            article: {},
+            article: {
+                category: {}
+            },
         }
     }
 
@@ -23,7 +25,12 @@ class ArticleInfo extends Component {
                 _this.setState({
                     article: JSON.parse(res.data),
                 })
-            }).catch(e => console.log(e))
+            }).catch(e => {
+            notification.open({
+                message: '请求失败',
+                description: '错误信息：' + e,
+            });
+        })
     }
 
     render() {
@@ -38,7 +45,7 @@ class ArticleInfo extends Component {
                     <Row>
                         <Col span={4}>
                             <Button id="articleInfoBackBtn">
-                                <NavLink to="/">
+                                <NavLink to={"/category/" + this.state.article.category.id}>
                                     <Icon type="left"/>
                                 </NavLink>
                             </Button>

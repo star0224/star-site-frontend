@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Navigation from "../../components/Navigation/Navigation";
 import './index.css'
 import axios from 'axios'
-import {BackTop, Button, Col, Divider, Icon, List, Row} from "antd";
+import {BackTop, Button, Col, Divider, Icon, List, notification, Row} from "antd";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import {NavLink} from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
@@ -22,16 +22,27 @@ class Home extends Component {
         const _this = this
         axios.get(global.constants.server + "/article/list")
             .then(res => {
+                console.log(JSON.parse(res.data))
                 _this.setState({
                     archives: JSON.parse(res.data),
                 })
-            }).catch(e => console.log(e))
+            }).catch(e => {
+            notification.open({
+                message: '请求失败',
+                description: '错误信息：' + e,
+            });
+        })
         axios.get(global.constants.server + "/article/category/list")
             .then(res => {
                 this.setState({
                     categories: JSON.parse(res.data)
                 })
-            })
+            }).catch(e => {
+            notification.open({
+                message: '请求失败',
+                description: '错误信息：' + e,
+            });
+        })
     }
 
 
@@ -90,10 +101,10 @@ class Home extends Component {
                                                 description={(
                                                     <div id="archivesDesc">
                                                         <IconText type="calendar" text={item.date} key="calendar"/>
-                                                        <IconText type="folder-open" text={item.category}
+                                                        <IconText type="folder-open" text={item.category.name}
                                                                   key="category"/>
                                                         <IconText type="message" text={2 + " Comments"} key="message"/>
-                                                        <IconText type="eye" text={item.likes + " Views"} key="like"/>
+                                                        <IconText type="eye" text={item.views + " Views"} key="views"/>
                                                     </div>
                                                 )}
                                             />
@@ -116,9 +127,9 @@ class Home extends Component {
                                     dataSource={this.state.categories}
                                     renderItem={item => (
                                         <List.Item>
-                                            <NavLink to={"/category/" + item.category}
+                                            <NavLink to={"/category/" + item.id}
                                                      style={{color: 'rgba(0, 0, 0, 0.65)'}}>
-                                                <IconText type="folder" text={item.category}/>
+                                                <IconText type="folder" text={item.name}/>
                                             </NavLink>
                                         </List.Item>
                                     )}

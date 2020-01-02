@@ -3,25 +3,35 @@ import NavigationBack from "../../../components/Navigation_Back/NavigationBack"
 import MdEditor from "for-editor"
 import $ from 'jquery'
 import './index.css'
-import {Button, Icon, Input, Tag, Tooltip} from "antd"
+import {Button, Input, notification, Select} from "antd"
 import axios from "axios"
+
+const { Option } = Select;
 
 class ArticleAdd extends Component {
     constructor(props) {
         super(props);
         this.state = {
             value: '',
-            tags: [],
             inputVisible: false,
             inputValue: '',
+            categoryId: '',
+            categoryList: []
         }
 
     }
 
     componentDidMount() {
+        const _this = this
         this.setState({
             width: $(window).width() - $('#navigation_bk').width()
         })
+        axios.get(global.constants.server + "/article/category/list")
+            .then(res => {
+                _this.setState({
+                    categoryList: JSON.parse(res.data)
+                })
+            })
     }
 
     handleChange(value) {
@@ -30,36 +40,6 @@ class ArticleAdd extends Component {
         })
     }
 
-    // 处理tag
-
-    handleClose = removedTag => {
-        const tags = this.state.tags.filter(tag => tag !== removedTag);
-        console.log(tags);
-        this.setState({tags});
-    };
-
-    showInput = () => {
-        this.setState({inputVisible: true}, () => this.input.focus());
-    };
-
-    handleInputChange = e => {
-        this.setState({inputValue: e.target.value});
-    };
-
-    handleInputConfirm = () => {
-        const {inputValue} = this.state;
-        let {tags} = this.state;
-        if (inputValue && tags.indexOf(inputValue) === -1) {
-            tags = [...tags, inputValue];
-        }
-        this.setState({
-            tags,
-            inputVisible: false,
-            inputValue: '',
-        });
-    };
-
-    saveInputRef = input => (this.input = input);
 
     // 保存事件
     saveArticle = () => {
@@ -67,15 +47,31 @@ class ArticleAdd extends Component {
             "title": $("#articleTitle").val(),
             "content": this.state.value,
             "tags": this.state.tags,
+            "views": 0,
+            "likes": 0,
             "isTop": 0,
-            "category": {
-                "name": "未分类"
+            "articleCategory": {
+                "id": this.state.categoryId
             }
         }
         axios.post(global.constants.server + '/article/add', data)
             .then(res => {
-                console.log(res)
-            })
+                notification.open({
+                    message: '插入成功',
+                    description: JSON.parse(res.data)
+                });
+            }).catch(e => {
+                notification.open({
+                    message: '插入失败',
+                    description: e
+                })
+        })
+    }
+
+    onChange = (value) => {
+        this.setState({
+            categoryId: value
+        })
     }
 
     render() {
@@ -88,39 +84,24 @@ class ArticleAdd extends Component {
                         autocomplete="off"
                         placeholder="输入文章标题" allowClear/>
                     <div id="tags">
-                        <span>文章标签：</span>
-                        {this.state.tags.map((tag, index) => {
-                            const isLongTag = tag.length > 20;
-                            const tagElem = (
-                                <Tag key={tag} closable onClose={() => this.handleClose(tag)}>
-                                    {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-                                </Tag>
-                            );
-                            return isLongTag ? (
-                                <Tooltip title={tag} key={tag}>
-                                    {tagElem}
-                                </Tooltip>
-                            ) : (
-                                tagElem
-                            );
-                        })}
-                        {this.state.inputVisible && (
-                            <Input
-                                ref={this.saveInputRef}
-                                type="text"
-                                size="small"
-                                style={{width: 78}}
-                                value={this.state.inputValue}
-                                onChange={this.handleInputChange}
-                                onBlur={this.handleInputConfirm}
-                                onPressEnter={this.handleInputConfirm}
-                            />
-                        )}
-                        {!this.state.inputVisible && (
-                            <Tag onClick={this.showInput} style={{background: '#fff', borderStyle: 'dashed'}}>
-                                <Icon type="plus"/> New Tag
-                            </Tag>
-                        )}
+                        <span>文章分类：</span>
+                        <Select
+                            showSearch
+                            style={{width: 200}}
+                            optionFilterProp="children"
+                            onChange={this.onChange}
+                            filterOption={(input, option) =>
+                                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                            }
+                        >
+                            {
+                                this.state.categoryList.map(item => {
+                                    return(
+                                        <Option value={item.id}>{item.name}</Option>
+                                    )
+                                })
+                            }
+                        </Select>
                     </div>
                     <MdEditor
                         style={{height: '500px'}}

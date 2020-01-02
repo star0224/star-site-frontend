@@ -1,0 +1,22 @@
+#categoryListBack {
+    width: 85vw;
+    float: right;
+    height: 100vh;
+}
+
+#categoryListBack > div {
+    height: 100%;
+}
+
+#categoryListBack > div > div{
+    height: 100%;
+}
+
+#categoryListBack > div > div > ul {
+    height: 100%;
+}
+
+#categoryListBack > div > div:nth-child(2) > div > div > div > ul {
+    text-align: center;
+    float: none;
+}
