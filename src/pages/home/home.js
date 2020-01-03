@@ -89,7 +89,7 @@ class Home extends Component {
                                         onChange: page => {
                                             console.log(page);
                                         },
-                                        pageSize: 6,
+                                        pageSize: 5,
                                     }}
                                     dataSource={this.state.archives}
                                     renderItem={item => (

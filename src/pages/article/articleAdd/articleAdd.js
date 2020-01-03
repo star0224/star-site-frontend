@@ -58,7 +58,7 @@ class ArticleAdd extends Component {
             .then(res => {
                 notification.open({
                     message: '插入成功',
-                    description: JSON.parse(res.data)
+                    description: 'success'
                 });
             }).catch(e => {
                 notification.open({
