@@ -3,6 +3,7 @@ import {Button, Col, Divider, Icon, Input, Menu, Modal, notification, Row, Table
 import axios from 'axios'
 import {NavLink} from "react-router-dom";
 import Highlighter from 'react-highlight-words';
+import './index.css'
 
 class Category extends Component {
 
@@ -16,7 +17,7 @@ class Category extends Component {
             isBackStage: props.isBackStage,
             confirmLoading: false,
             visible: false,
-            deleteId: "",
+            deleteId: '',
             searchText: '',
             searchedColumn: '',
         }
@@ -67,6 +68,9 @@ class Category extends Component {
         console.log(e.key)
         switch (e.key) {
             case 'all_category':
+                _this.setState({
+                    categorySelectedKeys: 'all_category'
+                })
                 axios.get(global.constants.server + "/article/list")
                     .then((res) => {
                         _this.setState({
@@ -80,6 +84,9 @@ class Category extends Component {
                 })
                 break
             default:
+                _this.setState({
+                    categorySelectedKeys: e.key
+                })
                 axios.get(global.constants.server + "/article/category/?categoryId=" + e.key)
                     .then((res) => {
                         _this.setState({
@@ -116,8 +123,8 @@ class Category extends Component {
 
     // table搜索功能
     getColumnSearchProps = dataIndex => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{ padding: 8 }}>
+        filterDropdown: ({setSelectedKeys, selectedKeys, confirm, clearFilters}) => (
+            <div style={{padding: 8}}>
                 <Input
                     ref={node => {
                         this.searchInput = node;
@@ -126,24 +133,24 @@ class Category extends Component {
                     value={selectedKeys[0]}
                     onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                     onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
-                    style={{ width: 188, marginBottom: 8, display: 'block' }}
+                    style={{width: 188, marginBottom: 8, display: 'block'}}
                 />
                 <Button
                     type="primary"
                     onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
                     icon="search"
                     size="small"
-                    style={{ width: 90, marginRight: 8 }}
+                    style={{width: 90, marginRight: 8}}
                 >
                     Search
                 </Button>
-                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+                <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{width: 90}}>
                     Reset
                 </Button>
             </div>
         ),
         filterIcon: filtered => (
-            <Icon type="search" style={{ color: filtered ? '#1890ff' : undefined }} />
+            <Icon type="search" style={{color: filtered ? '#1890ff' : undefined}}/>
         ),
         onFilter: (value, record) =>
             record[dataIndex]
@@ -158,7 +165,7 @@ class Category extends Component {
         render: text =>
             this.state.searchedColumn === dataIndex ? (
                 <Highlighter
-                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+                    highlightStyle={{backgroundColor: '#ffc069', padding: 0}}
                     searchWords={[this.state.searchText]}
                     autoEscape
                     textToHighlight={text.toString()}
@@ -178,9 +185,8 @@ class Category extends Component {
 
     handleReset = clearFilters => {
         clearFilters();
-        this.setState({ searchText: '' });
+        this.setState({searchText: ''});
     };
-
 
     render() {
 
@@ -191,10 +197,23 @@ class Category extends Component {
             </span>
         );
 
+        let title = () => {
+            switch (this.state.categorySelectedKeys) {
+                case 'all_category':
+                    return '全部分类'
+                    break
+                default:
+                    if (this.state.categoryList.length <= 0)
+                        return
+                    let selectedCategory = this.state.categoryList.find(text => text.id == this.state.categorySelectedKeys)
+                    return selectedCategory.name
+                    break
+            }
+        }
 
         const columns = [
             {
-                title: 'Title',
+                title: title,
                 dataIndex: 'title',
                 key: 'title',
                 width: '50%',
@@ -231,8 +250,9 @@ class Category extends Component {
                 </Modal>
                 <Col span={4}>
                     <Menu
+                        id="categoryMenu"
                         onClick={this.handleClick}
-                        style={{paddingTop: '5px'}}
+                        style={{paddingTop: '5px', overflowY: 'scroll', scrollbarWidth: 'none', overflowX: 'hidden'}}
                         defaultSelectedKeys={[this.state.categorySelectedKeys]}
                         mode="inline">
                         <Menu.Item key="all_category">

@@ -119,7 +119,7 @@ class Home extends Component {
                             <div id="essays">
                                 <h3>
                                     <Icon type="unordered-list"/>
-                                    目录
+                                    Category
                                 </h3>
                                 <Divider dashed/>
                                 <List
