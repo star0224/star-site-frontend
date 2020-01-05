@@ -6,3 +6,13 @@
     position: fixed;
     border: none;
 }
+
+#articleInfoTitle {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+#articleInfo > div > div:first-child > div:nth-child(2) {
+    margin-top: 40px;
+    position: fixed;
+}
