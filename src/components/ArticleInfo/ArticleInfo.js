@@ -34,12 +34,13 @@ class ArticleInfo extends Component {
                 let anchor = this.generatorAnchor()
                 _this.setState({
                     anchor: anchor,
-                    targetOffset: window.innerHeight / 3,
+                    targetOffset: window.innerHeight / 6,
                 })
                 $('h2').css('font-size', '28px')
                 $('h3').css('font-size', '25px')
                 $('h4').css('font-size', '22px')
                 $('h5').css('font-size', '19px')
+                $('#articleInfo').children('div:first-child').children('div:first-child').children('div:nth-child(2)').width($('#articleInfo').children('div:first-child').children('div:first-child').width())
             }).catch(e => {
             notification.open({
                 message: '请求失败',
@@ -49,7 +50,6 @@ class ArticleInfo extends Component {
     }
 
     generatorAnchor = () => {
-        let anchor = []
         const targetTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
         let parentDOMJQ = $('#articleInfo').children('div:first-child').children('div:nth-child(3)').children()
         const parentDOM = []
