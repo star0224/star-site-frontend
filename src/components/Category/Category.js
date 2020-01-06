@@ -4,6 +4,8 @@ import axios from 'axios'
 import {NavLink} from "react-router-dom";
 import Highlighter from 'react-highlight-words';
 import './index.css'
+import $ from 'jquery'
+import Footer from "../Footer/Footer";
 
 class Category extends Component {
 
@@ -25,6 +27,8 @@ class Category extends Component {
 
     componentDidMount() {
         const _this = this
+        $('footer').css('background-color', '#000')
+        $('footer').css('color', '#fff')
         axios.get(global.constants.server + "/article/category/list")
             .then((res) => {
                 _this.setState({
@@ -129,7 +133,6 @@ class Category extends Component {
                     ref={node => {
                         this.searchInput = node;
                     }}
-                    placeholder={`Search ${dataIndex}`}
                     value={selectedKeys[0]}
                     onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
                     onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
@@ -218,7 +221,15 @@ class Category extends Component {
                 key: 'title',
                 width: '50%',
                 ...this.getColumnSearchProps('title'),
-                render: (text, record) => <NavLink to={"/article/" + record.id}>{text}</NavLink>
+                render: (text, record) => {
+                    if (!this.state.isBackStage) {
+                        return (
+                            <NavLink to={"/article/" + record.id}>{text}</NavLink>
+                        )
+                    } else {
+                        return <NavLink to={"/bk/article/add/" + record.id}>{text}</NavLink>
+                    }
+                }
             }, {
                 title: 'Date',
                 dataIndex: 'date',
@@ -292,6 +303,7 @@ class Category extends Component {
                 <Col span={20}>
                     <Table columns={columns} dataSource={this.state.articleList}/>
                 </Col>
+                {this.state.isBackStage ? "" : <Footer/>}
             </Row>
         );
     }

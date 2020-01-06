@@ -6,7 +6,7 @@ import './index.css'
 import {Button, Input, notification, Select} from "antd"
 import axios from "axios"
 
-const { Option } = Select;
+const {Option} = Select;
 
 class ArticleAdd extends Component {
     constructor(props) {
@@ -16,9 +16,14 @@ class ArticleAdd extends Component {
             inputVisible: false,
             inputValue: '',
             categoryId: '',
-            categoryList: []
+            categoryList: [],
+            id: props.match.params.id,
+            articleTitle: '',
+            article: {
+                category: {}
+            }
         }
-
+        console.log(this.state.id)
     }
 
     componentDidMount() {
@@ -26,12 +31,28 @@ class ArticleAdd extends Component {
         this.setState({
             width: $(window).width() - $('#navigation_bk').width()
         })
-        axios.get(global.constants.server + "/article/category/list")
-            .then(res => {
-                _this.setState({
-                    categoryList: JSON.parse(res.data)
+        if (this.state.id != undefined) {
+            axios.get(global.constants.server + "/article?id=" + this.state.id)
+                .then(res => {
+                    const article = JSON.parse(res.data)
+                    _this.setState({
+                        article,
+                        categoryList: [
+                            article.category
+                        ],
+                        value: article.content,
+                        categoryId: article.category.id,
+                        articleTitle: article.title
+                    })
                 })
-            })
+        } else {
+            axios.get(global.constants.server + "/article/category/list")
+                .then(res => {
+                    _this.setState({
+                        categoryList: JSON.parse(res.data)
+                    })
+                })
+        }
     }
 
     handleChange(value) {
@@ -44,27 +65,37 @@ class ArticleAdd extends Component {
     // 保存事件
     saveArticle = () => {
         let data = {
-            "title": $("#articleTitle").val(),
+            "title": this.state.articleTitle,
             "content": this.state.value,
-            "tags": this.state.tags,
             "views": 0,
             "likes": 0,
             "isTop": 0,
             "articleCategory": {
-                "id": this.state.categoryId
+                "id": this.state.categoryId,
             }
+        }
+        if (this.state.id != undefined) {
+            data.id = this.state.id
+            data.articleCategory.name = this.state.article.category.name
         }
         axios.post(global.constants.server + '/article/add', data)
             .then(res => {
-                notification.open({
-                    message: '插入成功',
-                    description: 'success'
-                });
+                if (this.state.id != undefined) {
+                    notification.open({
+                        message: '修改成功',
+                        description: 'success'
+                    });
+                } else {
+                    notification.open({
+                        message: '插入成功',
+                        description: 'success'
+                    });
+                }
             }).catch(e => {
-                notification.open({
-                    message: '插入失败',
-                    description: e
-                })
+            notification.open({
+                message: '插入失败',
+                description: e
+            })
         })
     }
 
@@ -77,12 +108,22 @@ class ArticleAdd extends Component {
     render() {
         return (
             <div>
-                <NavigationBack selectedKeys="article_add" openKeys="article"/>
+                {
+                    this.state.id !== undefined ?
+                        <NavigationBack selectedKeys="article_update" openKeys="article"/> :
+                        <NavigationBack selectedKeys="article_add" openKeys="article"/>
+                }
                 <div id="addArticle">
                     <Input
                         id="articleTitle"
                         autocomplete="off"
-                        placeholder="输入文章标题" allowClear/>
+                        value={this.state.articleTitle}
+                        onChange={e => {
+                            this.setState({
+                                articleTitle: e.target.value
+                            })
+                        }}
+                        placeholder="输入文章标题"/>
                     <div id="tags">
                         <span>文章分类：</span>
                         <Select
@@ -90,13 +131,14 @@ class ArticleAdd extends Component {
                             style={{width: 200}}
                             optionFilterProp="children"
                             onChange={this.onChange}
+                            value={this.state.categoryId}
                             filterOption={(input, option) =>
                                 option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                             }
                         >
                             {
                                 this.state.categoryList.map(item => {
-                                    return(
+                                    return (
                                         <Option value={item.id}>{item.name}</Option>
                                     )
                                 })

@@ -24,7 +24,8 @@ class Router extends Component {
                         <Route path="/category/list" component={CategoryList}/>
                         <Route path="/category/:id" component={CategoryList}/>
                         <Route exact path="/bk" component={HomeBack}/>
-                        <Route path="/bk/article/add" component={ArticleAdd}/>
+                        <Route path="/bk/article/add/new" component={ArticleAdd}/>
+                        <Route path="/bk/article/add/:id" component={ArticleAdd}/>
                         <Route path="/bk/article/list" component={ArticleList}/>
                         <Route path="/article/:id" component={ArticleInfo}/>
                         <Route path="/bk/category/add" component={CategoryAddBack} />

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Navigation from "../../components/Navigation/Navigation";
 import './index.css'
 import axios from 'axios'
-import {BackTop, Button, Col, Divider, Icon, List, notification, Row} from "antd";
+import {BackTop, Button, Col, Divider, Drawer, Icon, List, notification, Popover, Row, Typography} from "antd";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import {NavLink} from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
@@ -14,7 +14,8 @@ class Home extends Component {
         this.state = {
             archives: [],
             essays: [],
-            categories: []
+            categories: [],
+            visible: false
         }
     }
 
@@ -22,7 +23,6 @@ class Home extends Component {
         const _this = this
         axios.get(global.constants.server + "/article/list")
             .then(res => {
-                console.log(JSON.parse(res.data))
                 _this.setState({
                     archives: JSON.parse(res.data),
                 })
@@ -48,6 +48,25 @@ class Home extends Component {
 
     render() {
 
+        const contactContent = (
+            <div>
+                <Button style={{border: 'none', boxShadow: 'none'}}>
+                    <a href="https://github.com/star0224" target="view_window">
+                        <Icon type="github" theme="filled"/>
+                    </a>
+                </Button>
+                <Popover content={(
+                    <div>
+                        <img style={{width: '20vw', height: '40vh'}} src={require('../../assets/wechat.jpg')} alt="load error"/>
+                    </div>
+                )} trigger="hover" placement="right">
+                    <Button style={{border: 'none', boxShadow: 'none'}} >
+                        <Icon type="wechat" theme="filled"/>
+                    </Button>
+                </Popover>
+            </div>
+        )
+
         const IconText = ({type, text}) => (
             <span>
                 <Icon type={type} style={{marginRight: 8}}/>
@@ -57,6 +76,32 @@ class Home extends Component {
 
         return (
             <div>
+                <Drawer
+                    width={350}
+                    title="Star Site V1.0"
+                    placement="right"
+                    closable={false}
+                    onClose={() => this.setState({visible: false})}
+                    visible={this.state.visible}
+                >
+                    <div>
+                        <h3>1.0版本增加了：</h3>
+                        <Divider style={{margin: '10px 0px 10px 0px'}}/>
+                        <ul style={{listStyle: 'none', paddingLeft: '5px', marginBottom: '50px'}}>
+                            <li style={{marginBottom: '5px'}}>1. 文章分类页面</li>
+                            <li style={{marginBottom: '5px'}}>2. 文章锚点自动生成算法</li>
+                            <li style={{marginBottom: '5px'}}>3. 后台文章及分类管理</li>
+                        </ul>
+                        <h3>预计在下版本上线：</h3>
+                        <Divider style={{margin: '10px 0px 10px 0px'}}/>
+                        <ul style={{listStyle: 'none', paddingLeft: '5px', marginBottom: '50px'}}>
+                            <li style={{marginBottom: '5px'}}>1. 文章标签实现可伸缩</li>
+                            <li style={{marginBottom: '5px'}}>2. 分类页面优化</li>
+                            <li style={{marginBottom: '5px'}}>3. 移动端适配</li>
+                        </ul>
+                    </div>
+                </Drawer>
+
                 <ProgressBar/>
                 <BackTop/>
                 <Navigation current="home"/>
@@ -66,9 +111,11 @@ class Home extends Component {
                     <p className="enHomeTitle">The First Lands —— The Placidium of Navori</p>
                     <h2 id="blurBoxTitle">Star的初生之土 —— 纳沃利的普雷西典</h2>
                     <p>
-                        <Button>What's New</Button>
-                        <Button>Archives</Button>
-                        <Button type="primary">Reading</Button>
+                        <Button onClick={() => this.setState({visible: true})}>What's New</Button>
+                        <Button>Technic</Button>
+                        <Popover content={contactContent} trigger="click" placement="right">
+                            <Button type="primary">Contact Me</Button>
+                        </Popover>
                     </p>
                 </div>
                 <div id="content">

@@ -38,16 +38,20 @@ class NavigationBack extends Component {
                         <span>文章</span>
                     </span>
                 }>
-                    <Menu.Item key="article_list">
-                        <NavLink to="/bk/article/list">
-                            Article List 列表
-                        </NavLink>
-                    </Menu.Item>
-                    <Menu.Item key="article_add" title="Add 增加">
-                        <NavLink to="/bk/article/add">
-                            Article Add 增加
-                        </NavLink>
-                    </Menu.Item>
+                    {
+                        this.state.selectedKeys !== 'article_update' ?
+                            <Menu.Item key="article_add" title="Add 增加">
+                                <NavLink to="/bk/article/add/new">
+                                    Article Add 增加
+                                </NavLink>
+                            </Menu.Item> : ""
+                    }
+                    {
+                        this.state.selectedKeys === 'article_update' ?
+                            <Menu.Item key="article_update">
+                                Article Update 修改
+                            </Menu.Item> : ""
+                    }
                 </SubMenu>
                 <SubMenu key="category" title={
                     <span>
