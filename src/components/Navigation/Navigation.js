@@ -69,7 +69,8 @@ class Navigation extends Component {
                   mode="horizontal">
                 <Menu.Item id="logoItem" key="logo">
                     <NavLink to="/">
-                        <Icon id="logo" type="star" theme="twoTone"/>
+                        {/*<Icon id="logo" type="star" theme="twoTone"/>*/}
+                        <img src={require('../../assets/star.svg')} />
                     </NavLink>
                 </Menu.Item>
                 <Menu.Item key="home" title="首页">

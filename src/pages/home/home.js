@@ -78,7 +78,7 @@ class Home extends Component {
             <div>
                 <Drawer
                     width={350}
-                    title="Star Site V1.0"
+                    title="Star Blog V1.0"
                     placement="right"
                     closable={false}
                     onClose={() => this.setState({visible: false})}
@@ -98,6 +98,7 @@ class Home extends Component {
                             <li style={{marginBottom: '5px'}}>1. 文章标签实现可伸缩</li>
                             <li style={{marginBottom: '5px'}}>2. 分类页面优化</li>
                             <li style={{marginBottom: '5px'}}>3. 移动端适配</li>
+                            <li style={{marginBottom: '5px'}}>4. 留言功能</li>
                         </ul>
                     </div>
                 </Drawer>
