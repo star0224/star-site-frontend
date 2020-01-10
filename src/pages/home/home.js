@@ -21,26 +21,42 @@ class Home extends Component {
 
     componentDidMount() {
         const _this = this
-        axios.get(global.constants.server + "/article/list")
+        axios.get(global.constants.server + "/article/list/public?isPublic=1")
             .then(res => {
-                _this.setState({
-                    archives: JSON.parse(res.data),
-                })
+                res = JSON.parse(res.data)
+                if (res.status === 1) {
+                    _this.setState({
+                        archives: res.data
+                    })
+                } else {
+                    notification.open({
+                        message: '请求失败',
+                        description: '服务器返回信息： ' + res.msg
+                    })
+                }
             }).catch(e => {
             notification.open({
                 message: '请求失败',
-                description: '错误信息：' + e,
+                description: '服务器无响应：' + e,
             });
         })
         axios.get(global.constants.server + "/article/category/list")
             .then(res => {
-                this.setState({
-                    categories: JSON.parse(res.data)
-                })
+                res = JSON.parse(res.data)
+                if (res.status === 1) {
+                    this.setState({
+                        categories: res.data
+                    })
+                } else {
+                    notification.open({
+                        message: '请求失败',
+                        description: '服务器返回信息： ' + res.msg
+                    })
+                }
             }).catch(e => {
             notification.open({
                 message: '请求失败',
-                description: '错误信息：' + e,
+                description: '服务器无响应：' + e,
             });
         })
     }
@@ -57,10 +73,11 @@ class Home extends Component {
                 </Button>
                 <Popover content={(
                     <div>
-                        <img style={{width: '20vw', height: '40vh'}} src={require('../../assets/wechat.jpg')} alt="load error"/>
+                        <img style={{width: '20vw', height: '40vh'}} src={require('../../assets/wechat.jpg')}
+                             alt="load error"/>
                     </div>
                 )} trigger="hover" placement="right">
-                    <Button style={{border: 'none', boxShadow: 'none'}} >
+                    <Button style={{border: 'none', boxShadow: 'none'}}>
                         <Icon type="wechat" theme="filled"/>
                     </Button>
                 </Popover>
@@ -134,9 +151,6 @@ class Home extends Component {
                                     itemLayout="vertical"
                                     size="large"
                                     pagination={{
-                                        onChange: page => {
-                                            console.log(page);
-                                        },
                                         pageSize: 5,
                                     }}
                                     dataSource={this.state.archives}

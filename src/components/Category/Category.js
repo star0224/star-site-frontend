@@ -31,39 +31,71 @@ class Category extends Component {
         $('footer').css('color', '#fff')
         axios.get(global.constants.server + "/article/category/list")
             .then((res) => {
-                _this.setState({
-                    categoryList: JSON.parse(res.data)
-                })
+                res = JSON.parse(res.data)
+                if (res.status === 1) {
+                    _this.setState({
+                        categoryList: res.data
+                    })
+                } else {
+                    notification.open({
+                        message: '请求失败',
+                        description: '服务器返回信息： ' + res.msg
+                    })
+                }
             }).catch(e => {
             notification.open({
                 message: '请求失败',
-                description: '错误信息：' + e,
+                description: '服务器无响应：' + e,
             });
         })
         if (this.state.categorySelectedKeys !== "all_category") {
-            axios.get(global.constants.server + "/article/category/?categoryId=" + this.state.categorySelectedKeys)
+            let target = "/article/category/?categoryId=" + this.state.categorySelectedKeys
+            if (this.state.isBackStage) {
+                target = "/article/category/?categoryId=" + this.state.categorySelectedKeys
+            }
+            axios.get(global.constants.server + target)
                 .then((res) => {
-                    _this.setState({
-                        articleList: JSON.parse(res.data)
-                    })
+                    res = JSON.parse(res.data)
+                    if (res.status === 1) {
+                        _this.setState({
+                            articleList: res.data
+                        })
+                    } else {
+                        notification.open({
+                            message: '请求失败',
+                            description: '服务器返回信息： ' + res.msg
+                        })
+                    }
                 }).catch(e => {
                 notification.open({
                     message: '请求失败',
-                    description: '错误信息：' + e,
+                    description: '服务器无响应：' + e,
                 });
             })
         } else {
-            axios.get(global.constants.server + "/article/list")
+            let target = "/article/list/public?isPublic=1"
+            if (this.state.isBackStage) {
+                target = "/article/list"
+            }
+            axios.get(global.constants.server + target)
                 .then((res) => {
-                    _this.setState({
-                        articleList: JSON.parse(res.data)
-                    })
+                    res = JSON.parse(res.data)
+                    if (res.status === 1) {
+                        _this.setState({
+                            articleList: res.data
+                        })
+                    } else {
+                        notification.open({
+                            message: '请求失败',
+                            description: '服务器返回信息： ' + res.msg
+                        })
+                    }
                 }).catch(e => {
                 notification.open({
                     message: '请求失败',
-                    description: '错误信息：' + e,
+                    description: '服务器无响应：' + e,
                 });
-            })
+            });
         }
     }
 
@@ -77,13 +109,21 @@ class Category extends Component {
                 })
                 axios.get(global.constants.server + "/article/list")
                     .then((res) => {
-                        _this.setState({
-                            articleList: JSON.parse(res.data)
-                        })
+                        res = JSON.parse(res.data)
+                        if (res.status === 1) {
+                            _this.setState({
+                                articleList: res.data
+                            })
+                        } else {
+                            notification.open({
+                                message: '请求失败',
+                                description: '服务器返回信息： ' + res.msg
+                            })
+                        }
                     }).catch(e => {
                     notification.open({
                         message: '请求失败',
-                        description: '错误信息：' + e,
+                        description: '服务器无响应：' + e,
                     });
                 })
                 break
@@ -93,13 +133,21 @@ class Category extends Component {
                 })
                 axios.get(global.constants.server + "/article/category/?categoryId=" + e.key)
                     .then((res) => {
-                        _this.setState({
-                            articleList: JSON.parse(res.data)
-                        })
+                        res = JSON.parse(res.data)
+                        if (res.status === 1) {
+                            _this.setState({
+                                articleList: res.data
+                            })
+                        } else {
+                            notification.open({
+                                message: '请求失败',
+                                description: '服务器返回信息： ' + res.msg
+                            })
+                        }
                     }).catch(e => {
                     notification.open({
                         message: '请求失败',
-                        description: '错误信息：' + e,
+                        description: '服务器无响应：' + e,
                     });
                 })
                 break

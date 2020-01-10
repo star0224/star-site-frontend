@@ -28,23 +28,31 @@ class ArticleInfo extends Component {
         const _this = this
         axios.get(global.constants.server + "/article?id=" + this.state.id)
             .then(res => {
-                _this.setState({
-                    article: JSON.parse(res.data),
-                })
-                let anchor = this.generatorAnchor()
-                _this.setState({
-                    anchor: anchor,
-                    targetOffset: window.innerHeight / 6,
-                })
-                $('h2').css('font-size', '28px')
-                $('h3').css('font-size', '25px')
-                $('h4').css('font-size', '22px')
-                $('h5').css('font-size', '19px')
-                $('#articleInfo').children('div:first-child').children('div:first-child').children('div:nth-child(2)').width($('#articleInfo').children('div:first-child').children('div:first-child').width())
+                res = JSON.parse(res.data)
+                if (res.status === 1) {
+                    _this.setState({
+                        article: res.data,
+                    })
+                    let anchor = this.generatorAnchor()
+                    _this.setState({
+                        anchor: anchor,
+                        targetOffset: window.innerHeight / 6,
+                    })
+                    $('h2').css('font-size', '28px')
+                    $('h3').css('font-size', '25px')
+                    $('h4').css('font-size', '22px')
+                    $('h5').css('font-size', '19px')
+                    $('#articleInfo').children('div:first-child').children('div:first-child').children('div:nth-child(2)').width($('#articleInfo').children('div:first-child').children('div:first-child').width())
+                } else {
+                    notification.open({
+                        message: '请求失败',
+                        description: '服务器返回信息： ' + res.msg
+                    })
+                }
             }).catch(e => {
             notification.open({
                 message: '请求失败',
-                description: '错误信息：' + e,
+                description: '服务器无响应： ' + e,
             });
         })
     }

@@ -23,7 +23,6 @@ class ArticleAdd extends Component {
                 category: {}
             }
         }
-        console.log(this.state.id)
     }
 
     componentDidMount() {
@@ -34,24 +33,50 @@ class ArticleAdd extends Component {
         if (this.state.id != undefined) {
             axios.get(global.constants.server + "/article?id=" + this.state.id)
                 .then(res => {
-                    const article = JSON.parse(res.data)
-                    _this.setState({
-                        article,
-                        categoryList: [
-                            article.category
-                        ],
-                        value: article.content,
-                        categoryId: article.category.id,
-                        articleTitle: article.title
-                    })
+                    res = JSON.parse(res.data)
+                    if (res.status === 1) {
+                        const article = res.data
+                        _this.setState({
+                            article,
+                            categoryList: [
+                                article.category
+                            ],
+                            value: article.content,
+                            categoryId: article.category.id,
+                            articleTitle: article.title
+                        })
+                    } else {
+                        notification.open({
+                            message: '请求失败',
+                            description: '服务器返回信息： ' + res.msg
+                        })
+                    }
+                }).catch(e => {
+                notification.open({
+                    message: '请求失败',
+                    description: '服务器无响应：' + e,
                 })
+            })
         } else {
             axios.get(global.constants.server + "/article/category/list")
                 .then(res => {
-                    _this.setState({
-                        categoryList: JSON.parse(res.data)
-                    })
+                    res = JSON.parse(res.data)
+                    if (res.status === 1) {
+                        _this.setState({
+                            categoryList: res.data
+                        })
+                    } else {
+                        notification.open({
+                            message: '请求失败',
+                            description: '服务器返回信息： ' + res.msg
+                        })
+                    }
+                }).catch(e => {
+                notification.open({
+                    message: '请求失败',
+                    description: '服务器无响应：' + e,
                 })
+            })
         }
     }
 
@@ -63,16 +88,14 @@ class ArticleAdd extends Component {
 
 
     // 保存事件
-    saveArticle = () => {
+    saveArticle = (isPublic) => {
         let data = {
             "title": this.state.articleTitle,
             "content": this.state.value,
-            "views": 0,
-            "likes": 0,
-            "isTop": 0,
             "articleCategory": {
                 "id": this.state.categoryId,
-            }
+            },
+            "isPublic": isPublic
         }
         if (this.state.id != undefined) {
             data.id = this.state.id
@@ -80,21 +103,22 @@ class ArticleAdd extends Component {
         }
         axios.post(global.constants.server + '/article/add', data)
             .then(res => {
-                if (this.state.id != undefined) {
+                res = JSON.parse(res.data)
+                if (res.status === 1) {
                     notification.open({
-                        message: '修改成功',
-                        description: 'success'
-                    });
+                        message: '请求成功',
+                        description: '服务器返回信息： ' + res.msg
+                    })
                 } else {
                     notification.open({
-                        message: '插入成功',
-                        description: 'success'
-                    });
+                        message: '请求失败',
+                        description: '服务器返回信息： ' + res.msg
+                    })
                 }
             }).catch(e => {
             notification.open({
-                message: '插入失败',
-                description: e
+                message: '请求失败',
+                description: '服务器无响应：' + e,
             })
         })
     }
@@ -150,8 +174,8 @@ class ArticleAdd extends Component {
                         value={this.state.value} placeholder=" "
                         onChange={value => this.handleChange(value)}/>
                     <div id="saveButton">
-                        <Button type="primary" onClick={this.saveArticle}>保存</Button>
-                        <Button type="primary">保存并发布</Button>
+                        <Button type="primary" onClick={() => this.saveArticle("0")}>保存为草稿</Button>
+                        <Button type="primary" onClick={() => this.saveArticle("1")}>保存并发布</Button>
                     </div>
                 </div>
             </div>
