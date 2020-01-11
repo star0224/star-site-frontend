@@ -90,7 +90,7 @@
     margin-bottom: 10px;
 }
 
-#archives > div:nth-child(3) > div:nth-child(2)  {
+#archives > div:nth-child(3) > div:nth-child(2) {
     text-align: center;
 }
 
@@ -121,5 +121,50 @@
 
 #archives > h3 > i {
     margin-right: 7px;
+}
+
+#activities {
+    border: 1px solid #e1e4e8 !important;
+    list-style: none;
+    border-color: #d1d5da !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    padding-right: 40px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    text-align: center;
+}
+
+#activities > li {
+    height: 16px;
+    overflow: hidden;
+}
+
+#activities > li:first-child {
+    text-align: left;
+    padding-left: 42px;
+    font-size: 10px;
+}
+
+#activities > li:first-child > div {
+    margin-right: 46px;
+}
+
+.square {
+    display: inline-block;
+    margin-right: 3px;
+    width: 12px;
+    height: 12px;
+    background-color: rgb(235, 237, 240);
+}
+
+.weekTitle {
+    display: inline-block;
+    display: inline-block;
+    width: 20px;
+    font-size: 9px;
+    fill: #767676;
+    margin-right: 5px;
+    height: 12px;
 }
 

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Navigation from "../../components/Navigation/Navigation";
 import './index.css'
 import axios from 'axios'
-import {BackTop, Button, Col, Divider, Drawer, Icon, List, notification, Popover, Row, Typography} from "antd";
+import {BackTop, Button, Col, Divider, Drawer, Icon, List, notification, Popover, Row, Tooltip, Typography} from "antd";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import {NavLink} from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
@@ -15,7 +15,10 @@ class Home extends Component {
             archives: [],
             essays: [],
             categories: [],
-            visible: false
+            visible: false,
+            articleDate: [
+                [], [], [], [], [], [], []
+            ]
         }
     }
 
@@ -59,8 +62,119 @@ class Home extends Component {
                 description: '服务器无响应：' + e,
             });
         })
+        this.generateActivities()
     }
 
+    generateActivities = () => {
+        const year = new Date().getFullYear()
+
+        // 获取今年第一天所在星期 firstWeek
+        let firstDay = new Date(year, 0, 1)
+        let firstWeek = []
+        const firstDayIndex = firstDay.getDay()
+        let firstWeekIndex = firstDayIndex
+        while (firstWeekIndex < 7) {
+            firstWeek[firstWeekIndex++] = new Date(year, 0, firstWeekIndex - firstDayIndex + 1).toLocaleDateString()
+        }
+        while (firstWeekIndex > 0) {
+            firstWeek[firstWeekIndex--] = new Date(year, 0, firstWeekIndex - firstDayIndex + 1).toLocaleDateString()
+        }
+
+        // 获取今年最后一天所在星期 lastWeek
+        let lastDay = new Date(year, 11, 31)
+        let lastWeek = []
+        const lastDayIndex = lastDay.getDay()
+        let lastWeekIndex = lastDayIndex
+        while (lastWeekIndex < 7) {
+            lastWeek[lastWeekIndex++] = new Date(year, 11, lastWeekIndex - lastDayIndex + 31).toLocaleDateString()
+        }
+        while (lastWeekIndex > 0) {
+            lastWeek[lastWeekIndex--] = new Date(year, 11, lastWeekIndex - lastDayIndex + 31).toLocaleDateString()
+        }
+
+        console.log(firstWeek)
+        console.log(lastWeek)
+
+        // 按星期将全年分成七份
+        let sun = [], mon = [], tue = [], wed = [], thu = [], fri = [], sat = []
+        this.generateWeeksInYear(sun, firstWeek[1], lastWeek[1])
+        this.generateWeeksInYear(mon, firstWeek[2], lastWeek[2])
+        this.generateWeeksInYear(tue, firstWeek[3], lastWeek[3])
+        this.generateWeeksInYear(wed, firstWeek[4], lastWeek[4])
+        this.generateWeeksInYear(thu, firstWeek[5], lastWeek[5])
+        this.generateWeeksInYear(fri, firstWeek[6], lastWeek[6])
+        this.generateWeeksInYear(sat, firstWeek[7], lastWeek[7])
+        this.setState({
+            articleDate: [sun, mon, tue, wed, thu, fri, sat]
+        })
+    }
+
+    generateWeeksInYear = (weekArr, firstDay, lastDay) => {
+        const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        let tempDate = firstDay
+        weekArr.push({
+            month: month[firstDay.split('/')[1] - 1],
+            year: firstDay.split('/')[0],
+            date: firstDay.split('/')[2],
+            articleNum: 0
+        })
+        while (tempDate !== lastDay) {
+            let tempDateArr = tempDate.split('/')
+            tempDate = new Date(tempDateArr[0], tempDateArr[1] - 1, tempDateArr[2])
+            tempDate = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate() + 7)
+            console.log(tempDate.toLocaleDateString())
+            weekArr.push({
+                month: month[tempDate.getMonth()],
+                year: tempDate.getFullYear(),
+                date: tempDate.getDate(),
+                articleNum: 0
+            })
+            tempDate = tempDate.toLocaleDateString()
+        }
+    }
+
+    generateActivitiesSquare = (item) => {
+        switch (item.articleNum) {
+            case 0:
+                return (
+                    <Tooltip title={"No article on " + item.month + " " + item.date + ", " + item.year}>
+                        <div className="square"></div>
+                    </Tooltip>
+                )
+                break
+            case 1:
+                return (
+                    <Tooltip title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
+                        <div className="square"
+                             style={{backgroundColor: '#c6e48b'}}></div>
+                    </Tooltip>
+                )
+                break
+            case 2:
+                return (
+                    <Tooltip title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
+                        <div className="square"
+                             style={{backgroundColor: '#7bc96f'}}></div>
+                    </Tooltip>
+                )
+                break
+            case 3:
+                return (
+                    <Tooltip title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
+                        <div className="square"
+                             style={{backgroundColor: '#239a3b'}}></div>
+                    </Tooltip>
+                )
+                break
+            default:
+                return (
+                    <Tooltip title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
+                        <div className="square"
+                             style={{backgroundColor: '#196127'}}></div>
+                    </Tooltip>
+                )
+        }
+    }
 
     render() {
 
@@ -137,6 +251,77 @@ class Home extends Component {
                     </p>
                 </div>
                 <div id="content">
+                    <Row>
+                        <Col span={4}></Col>
+                        <Col span={15}>
+                            <h3 style={{marginTop: '20px', fontWeight: 'normal', textAlign: 'left'}}>
+                                {this.state.archives.length} Articles in {new Date().getFullYear()}
+                            </h3>
+                            <ul id="activities">
+                                <li>
+                                    {
+                                        ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(item => {
+                                            return (
+                                                <div className="weekTitle">{item}</div>
+                                            )
+                                        })
+                                    }
+                                </li>
+                                <li>
+                                    <div className="weekTitle">
+                                    </div>
+                                    {this.state.articleDate[0].map(this.generateActivitiesSquare)}
+                                </li>
+                                <li>
+                                    <div className="weekTitle">
+                                        Mon
+                                    </div>
+                                    {this.state.articleDate[1].map(this.generateActivitiesSquare)}
+                                </li>
+                                <li>
+                                    <div className="weekTitle">
+                                    </div>
+                                    {this.state.articleDate[2].map(this.generateActivitiesSquare)}
+                                </li>
+                                <li>
+                                    <div className="weekTitle">
+                                        Wed
+                                    </div>
+                                    {this.state.articleDate[3].map(this.generateActivitiesSquare)}
+                                </li>
+                                <li>
+                                    <div className="weekTitle">
+                                    </div>
+                                    {this.state.articleDate[4].map(this.generateActivitiesSquare)}
+                                </li>
+                                <li>
+                                    <div className="weekTitle">
+                                        Fri
+                                    </div>
+                                    {this.state.articleDate[5].map(this.generateActivitiesSquare)}
+                                </li>
+                                <li>
+                                    <div className="weekTitle">
+                                    </div>
+                                    {this.state.articleDate[6].map(this.generateActivitiesSquare)}
+                                </li>
+                                <li style={{textAlign: 'right', marginTop: '8px', marginRight: '15px'}}>
+                                    <div className="weekTitle">Less</div>
+                                    <div className="square"></div>
+                                    <div className="square"
+                                         style={{backgroundColor: '#c6e48b'}}></div>
+                                    <div className="square"
+                                         style={{backgroundColor: '#7bc96f'}}></div>
+                                    <div className="square"
+                                         style={{backgroundColor: '#239a3b'}}></div>
+                                    <div className="square"
+                                         style={{backgroundColor: '#196127'}}></div>
+                                    <div className="weekTitle">More</div>
+                                </li>
+                            </ul>
+                        </Col>
+                        <Col span={5}></Col>
+                    </Row>
                     <Row>
                         <Col span={3}>
                         </Col>
