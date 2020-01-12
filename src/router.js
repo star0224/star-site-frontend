@@ -4,7 +4,6 @@ import Home from "./pages/home/home";
 import App from "./App";
 import HomeBack from "./pages/home_back/homeBack";
 import ArticleAdd from "./pages/article/articleAdd/articleAdd";
-import ArticleList from "./pages/article/articleList/articleList";
 import ArticleInfo from "./components/ArticleInfo/ArticleInfo";
 import NoMatch from "./pages/404/noMatch";
 import CategoryAddBack from "./pages/categoryBack/categoryAddBack/categoryAddBack";
@@ -28,10 +27,10 @@ class Router extends Component {
                         <Route exact path="/bk" component={HomeBack}/>
                         <Route path="/bk/article/add/new" component={ArticleAdd}/>
                         <Route path="/bk/article/add/:id" component={ArticleAdd}/>
-                        <Route path="/bk/article/list" component={ArticleList}/>
                         <Route path="/article/:id" component={ArticleInfo}/>
                         <Route path="/bk/category/add" component={CategoryAddBack} />
                         <Route path="/bk/category/list" component={CategoryListBack} />
+                        <Route path="/bk/category/:id" component={CategoryListBack} />
                         <Route component={NoMatch}/>
                     </Switch>
                 </App>

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Navigation from "../../components/Navigation/Navigation";
 import './index.css'
 import axios from 'axios'
-import {BackTop, Button, Col, Divider, Drawer, Icon, List, notification, Popover, Row, Tooltip, Typography} from "antd";
+import {BackTop, Button, Col, Divider, Drawer, Icon, List, notification, Popover, Row, Tooltip} from "antd";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import {NavLink} from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
@@ -56,18 +56,17 @@ class Home extends Component {
                         description: '服务器返回信息： ' + res.msg
                     })
                 }
+                this.generateActivities()
             }).catch(e => {
             notification.open({
                 message: '请求失败',
                 description: '服务器无响应：' + e,
             });
         })
-        this.generateActivities()
     }
 
     generateActivities = () => {
         const year = new Date().getFullYear()
-
         // 获取今年第一天所在星期 firstWeek
         let firstDay = new Date(year, 0, 1)
         let firstWeek = []
@@ -92,42 +91,52 @@ class Home extends Component {
             lastWeek[lastWeekIndex--] = new Date(year, 11, lastWeekIndex - lastDayIndex + 31).toLocaleDateString()
         }
 
-        console.log(firstWeek)
-        console.log(lastWeek)
+        // 获取文章日期信息
+        let articleActivity = new Map()
+        this.state.archives.map(item => {
+            let date = item.date.split("-")
+            date = new Date(date[0], date[1] - 1, date[2])
+            if (articleActivity.get(date.toLocaleDateString()) !== undefined) {
+                articleActivity.set(date.toLocaleDateString(), articleActivity.get(date.toLocaleDateString()) + 1)
+            } else {
+                articleActivity.set(date.toLocaleDateString(), 1)
+            }
+        })
 
         // 按星期将全年分成七份
         let sun = [], mon = [], tue = [], wed = [], thu = [], fri = [], sat = []
-        this.generateWeeksInYear(sun, firstWeek[1], lastWeek[1])
-        this.generateWeeksInYear(mon, firstWeek[2], lastWeek[2])
-        this.generateWeeksInYear(tue, firstWeek[3], lastWeek[3])
-        this.generateWeeksInYear(wed, firstWeek[4], lastWeek[4])
-        this.generateWeeksInYear(thu, firstWeek[5], lastWeek[5])
-        this.generateWeeksInYear(fri, firstWeek[6], lastWeek[6])
-        this.generateWeeksInYear(sat, firstWeek[7], lastWeek[7])
+        this.generateWeeksInYear(sun, firstWeek[1], lastWeek[1], articleActivity)
+        this.generateWeeksInYear(mon, firstWeek[2], lastWeek[2], articleActivity)
+        this.generateWeeksInYear(tue, firstWeek[3], lastWeek[3], articleActivity)
+        this.generateWeeksInYear(wed, firstWeek[4], lastWeek[4], articleActivity)
+        this.generateWeeksInYear(thu, firstWeek[5], lastWeek[5], articleActivity)
+        this.generateWeeksInYear(fri, firstWeek[6], lastWeek[6], articleActivity)
+        this.generateWeeksInYear(sat, firstWeek[7], lastWeek[7], articleActivity)
         this.setState({
             articleDate: [sun, mon, tue, wed, thu, fri, sat]
         })
     }
 
-    generateWeeksInYear = (weekArr, firstDay, lastDay) => {
+    generateWeeksInYear = (weekArr, firstDay, lastDay, articleActivity) => {
         const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         let tempDate = firstDay
+        let articleNum = articleActivity.get(tempDate)
         weekArr.push({
             month: month[firstDay.split('/')[1] - 1],
             year: firstDay.split('/')[0],
             date: firstDay.split('/')[2],
-            articleNum: 0
+            articleNum: articleNum === undefined ? 0 : articleNum
         })
         while (tempDate !== lastDay) {
             let tempDateArr = tempDate.split('/')
             tempDate = new Date(tempDateArr[0], tempDateArr[1] - 1, tempDateArr[2])
             tempDate = new Date(tempDate.getFullYear(), tempDate.getMonth(), tempDate.getDate() + 7)
-            console.log(tempDate.toLocaleDateString())
+            articleNum = articleActivity.get(tempDate.toLocaleDateString())
             weekArr.push({
                 month: month[tempDate.getMonth()],
                 year: tempDate.getFullYear(),
                 date: tempDate.getDate(),
-                articleNum: 0
+                articleNum: articleNum === undefined ? 0 : articleNum
             })
             tempDate = tempDate.toLocaleDateString()
         }
@@ -137,38 +146,34 @@ class Home extends Component {
         switch (item.articleNum) {
             case 0:
                 return (
-                    <Tooltip title={"No article on " + item.month + " " + item.date + ", " + item.year}>
+                    <Tooltip mouseEnterDelay={0} mouseLeaveDelay={0} title={"No article on " + item.month + " " + item.date + ", " + item.year}>
                         <div className="square"></div>
                     </Tooltip>
                 )
-                break
             case 1:
                 return (
-                    <Tooltip title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
+                    <Tooltip mouseEnterDelay={0} mouseLeaveDelay={0} title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
                         <div className="square"
                              style={{backgroundColor: '#c6e48b'}}></div>
                     </Tooltip>
                 )
-                break
             case 2:
                 return (
-                    <Tooltip title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
+                    <Tooltip mouseEnterDelay={0} mouseLeaveDelay={0} title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
                         <div className="square"
                              style={{backgroundColor: '#7bc96f'}}></div>
                     </Tooltip>
                 )
-                break
             case 3:
                 return (
-                    <Tooltip title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
+                    <Tooltip mouseEnterDelay={0} mouseLeaveDelay={0} title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
                         <div className="square"
                              style={{backgroundColor: '#239a3b'}}></div>
                     </Tooltip>
                 )
-                break
             default:
                 return (
-                    <Tooltip title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
+                    <Tooltip mouseEnterDelay={0} mouseLeaveDelay={0} title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
                         <div className="square"
                              style={{backgroundColor: '#196127'}}></div>
                     </Tooltip>
@@ -222,6 +227,7 @@ class Home extends Component {
                             <li style={{marginBottom: '5px'}}>1. 文章分类页面</li>
                             <li style={{marginBottom: '5px'}}>2. 文章锚点自动生成算法</li>
                             <li style={{marginBottom: '5px'}}>3. 后台文章及分类管理</li>
+                            <li style={{marginBottom: '5px'}}>4. 仪表盘功能</li>
                         </ul>
                         <h3>预计在下版本上线：</h3>
                         <Divider style={{margin: '10px 0px 10px 0px'}}/>

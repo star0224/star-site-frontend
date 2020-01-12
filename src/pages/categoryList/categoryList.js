@@ -9,7 +9,6 @@ class CategoryList extends Component {
 
     constructor(props) {
         super(props);
-        console.log(props.match.params.id)
         this.state = {
             categoryId: props.match.params.id
         }

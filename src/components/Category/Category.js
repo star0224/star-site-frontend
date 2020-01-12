@@ -9,9 +9,11 @@ import Footer from "../Footer/Footer";
 
 class Category extends Component {
 
+    isDeleteCategory = false
+    deleteCategoryId
+
     constructor(props) {
         super(props);
-        console.log(props.categorySelectedKeys)
         this.state = {
             categorySelectedKeys: props.categorySelectedKeys,
             categoryList: [],
@@ -19,9 +21,11 @@ class Category extends Component {
             isBackStage: props.isBackStage,
             confirmLoading: false,
             visible: false,
-            deleteId: '',
             searchText: '',
             searchedColumn: '',
+            articleModalVisible: false,
+            articleModalConfirmLoading: false,
+            deleteArticleId: ''
         }
     }
 
@@ -99,9 +103,22 @@ class Category extends Component {
         }
     }
 
+    redirect2ThisPage = () => {
+        if (this.state.categorySelectedKeys === 'all_category') {
+            window.location.href = '/bk/category/list'
+        } else {
+            window.location.href = '/bk/category/' + this.state.categorySelectedKeys
+        }
+    }
+
     handleClick = (e) => {
         const _this = this
-        console.log(e.key)
+        if (_this.isDeleteCategory) {
+            _this.isDeleteCategory = false
+            _this.deleteCategoryId = e.key
+            e.key = _this.state.categorySelectedKeys
+            return
+        }
         switch (e.key) {
             case 'all_category':
                 _this.setState({
@@ -165,12 +182,35 @@ class Category extends Component {
         this.setState({
             confirmLoading: true
         })
-        setTimeout(() => {
+        axios.get(global.constants.server + "/article/category/delete?id=" + this.deleteCategoryId)
+            .then((res) => {
+                res = JSON.parse(res.data)
+                if (res.status === 1) {
+                    notification.open({
+                        message: '请求成功',
+                        description: '服务器返回信息： ' + res.msg
+                    });
+                    window.location.href = '/bk/category/list'
+                } else {
+                    notification.open({
+                        message: '请求失败',
+                        description: '服务器返回信息： ' + res.msg
+                    })
+                }
+                this.setState({
+                    visible: false,
+                    confirmLoading: false
+                })
+            }).catch((e) => {
+            notification.open({
+                message: '请求失败',
+                description: '服务器无响应： ' + e
+            })
             this.setState({
                 visible: false,
                 confirmLoading: false
             })
-        }, 2000)
+        })
     }
 
     // table搜索功能
@@ -241,6 +281,8 @@ class Category extends Component {
 
     render() {
 
+        const _this = this
+
         const IconText = ({type, text}) => (
             <span>
                 <Icon type={type} style={{marginRight: 8}}/>
@@ -252,13 +294,11 @@ class Category extends Component {
             switch (this.state.categorySelectedKeys) {
                 case 'all_category':
                     return '全部分类'
-                    break
                 default:
                     if (this.state.categoryList.length <= 0)
                         return
                     let selectedCategory = this.state.categoryList.find(text => text.id == this.state.categorySelectedKeys)
                     return selectedCategory.name
-                    break
             }
         }
 
@@ -269,15 +309,7 @@ class Category extends Component {
                 key: 'title',
                 width: '50%',
                 ...this.getColumnSearchProps('title'),
-                render: (text, record) => {
-                    if (!this.state.isBackStage) {
-                        return (
-                            <NavLink to={"/article/" + record.id}>{text}</NavLink>
-                        )
-                    } else {
-                        return <NavLink to={"/bk/article/add/" + record.id}>{text}</NavLink>
-                    }
-                }
+                render: (text, record) => <NavLink to={"/article/" + record.id}>{text}</NavLink>
             }, {
                 title: 'Date',
                 dataIndex: 'date',
@@ -295,6 +327,110 @@ class Category extends Component {
                 render: text => <IconText type="eye" text={text + " Views"} key="views"/>
             }
         ];
+        const backColumns = [
+            {
+                title: title,
+                dataIndex: 'title',
+                key: 'title',
+                width: '45%',
+                ...this.getColumnSearchProps('title'),
+                render: (text, record) => <NavLink to={"/bk/article/add/" + record.id}>{text}</NavLink>
+            }, {
+                title: 'Date',
+                dataIndex: 'date',
+                align: 'center',
+                width: '15%',
+                key: 'date',
+                render: text => <IconText type="calendar" text={text} key="calendar"/>
+
+            }, {
+                title: 'Views',
+                dataIndex: 'views',
+                key: 'views',
+                width: '15%',
+                align: 'center',
+                render: text => <IconText type="eye" text={text + " Views"} key="views"/>
+            }, {
+                title: 'Action',
+                dataIndex: 'action',
+                key: 'action',
+                width: '15%',
+                align: 'center',
+                render: (text, record) => {
+                    if (record.isPublic === '1') {
+                        return (
+                            <span>
+                                <a onClick={() => {
+                                    axios.get(global.constants.server + "/article/update/public?id=" + record.id + "&isPublic=" + "0")
+                                        .then(res => {
+                                            res = JSON.parse(res.data)
+                                            if (res.status === 1) {
+                                                notification.open({
+                                                    message: '请求成功',
+                                                    description: '服务器返回信息： ' + res.msg
+                                                });
+                                                this.redirect2ThisPage()
+                                            } else {
+                                                notification.open({
+                                                    message: '请求失败',
+                                                    description: '服务器返回信息： ' + res.msg
+                                                })
+                                            }
+                                        }).catch(e => {
+                                        notification.open({
+                                            message: '请求失败',
+                                            description: '服务器无响应： ' + e
+                                        })
+                                    })
+                                }} style={{color: '#1890ff'}}>Set Hidden</a>
+                                <Divider type="vertical"/>
+                                <a onClick={() => {
+                                    this.setState({
+                                        deleteArticleId: record.id,
+                                        articleModalVisible: true
+                                    })
+                                }} style={{color: '#1890ff'}}>Delete</a>
+                            </span>
+                        )
+                    } else {
+                        return (
+                            <span>
+                                <a onClick={() => {
+                                    axios.get(global.constants.server + "/article/update/public?id=" + record.id + "&isPublic=" + "1")
+                                        .then(res => {
+                                            res = JSON.parse(res.data)
+                                            if (res.status === 1) {
+                                                notification.open({
+                                                    message: '请求成功',
+                                                    description: '服务器返回信息： ' + res.msg
+                                                });
+                                                this.redirect2ThisPage()
+                                            } else {
+                                                notification.open({
+                                                    message: '请求失败',
+                                                    description: '服务器返回信息： ' + res.msg
+                                                })
+                                            }
+                                        }).catch(e => {
+                                        notification.open({
+                                            message: '请求失败',
+                                            description: '服务器无响应： ' + e
+                                        })
+                                    })
+                                }} style={{color: '#1890ff'}}>Set Public</a>
+                                <Divider type="vertical"/>
+                                <a onClick={() => {
+                                    this.setState({
+                                        deleteArticleId: record.id,
+                                        articleModalVisible: true
+                                    })
+                                }} style={{color: '#1890ff'}}>Delete</a>
+                            </span>
+                        )
+                    }
+                }
+            }
+        ];
 
         return (
             <Row>
@@ -305,7 +441,53 @@ class Category extends Component {
                     confirmLoading={this.state.confirmLoading}
                     onCancel={this.handleCancel}
                 >
-                    <p>确认是否删除</p>
+                    <p>确认是否删除该分类及其下所有文章</p>
+                </Modal>
+                <Modal
+                    title="Warning"
+                    visible={this.state.articleModalVisible}
+                    onOk={(id) => {
+                        this.setState({
+                            articleModalConfirmLoading: true
+                        })
+                        axios.get(global.constants.server + "/article/delete?id=" + this.state.deleteArticleId)
+                            .then((res) => {
+                                res = JSON.parse(res.data)
+                                if (res.status === 1) {
+                                    notification.open({
+                                        message: '请求成功',
+                                        description: '服务器返回信息： ' + res.msg
+                                    });
+                                    this.redirect2ThisPage()
+                                } else {
+                                    notification.open({
+                                        message: '请求失败',
+                                        description: '服务器返回信息： ' + res.msg
+                                    })
+                                }
+                                this.setState({
+                                    articleModalVisible: false,
+                                    articleModalConfirmLoading: false
+                                })
+                            }).catch((e) => {
+                            notification.open({
+                                message: '请求失败',
+                                description: '服务器无响应： ' + e
+                            })
+                            this.setState({
+                                articleModalVisible: false,
+                                articleModalConfirmLoading: false
+                            })
+                        })
+                    }}
+                    confirmLoading={this.state.articleModalConfirmLoading}
+                    onCancel={() => {
+                        this.setState({
+                            articleModalVisible: false
+                        })
+                    }}
+                >
+                    <p>确认是否删除该文章</p>
                 </Modal>
                 <Col span={4}>
                     <Menu
@@ -324,16 +506,16 @@ class Category extends Component {
                                     <Menu.Item key={item.id}>
                                         {item.name}
                                         <Icon type="close-circle" style={{
-                                            float: 'right',
-                                            position: 'relative',
+                                            position: 'absolute',
+                                            marginLeft: '15px',
                                             top: '50%',
                                             transform: 'translateY(-50%)'
                                         }}
-                                              onClick={e => {
+                                              onClick={() => {
                                                   this.setState({
                                                       visible: true,
-                                                      deleteId: item.id
                                                   })
+                                                  this.isDeleteCategory = true
                                               }}
                                         />
                                     </Menu.Item>
@@ -349,7 +531,8 @@ class Category extends Component {
                     </Menu>
                 </Col>
                 <Col span={20}>
-                    <Table columns={columns} dataSource={this.state.articleList}/>
+                    <Table columns={this.state.isBackStage ? backColumns : columns}
+                           dataSource={this.state.articleList}/>
                 </Col>
                 {this.state.isBackStage ? "" : <Footer/>}
             </Row>

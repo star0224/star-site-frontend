@@ -5,12 +5,23 @@ import Category from "../../../components/Category/Category";
 
 
 class CategoryListBack extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            categoryId: props.match.params.id
+        }
+    }
+
     render() {
         return (
             <div>
                 <NavigationBack selectedKeys="category_list" openKeys="category"/>
                 <div id="categoryListBack">
-                    <Category isBackStage={true} categorySelectedKeys="all_category"/>
+                    {
+                        this.state.categoryId !== undefined ?
+                            <Category isBackStage={true} categorySelectedKeys={this.state.categoryId}/> :
+                            <Category isBackStage={true} categorySelectedKeys="all_category"/>
+                    }
                 </div>
             </div>
         );

@@ -34,23 +34,24 @@ class CategoryAddBack extends Component {
                                 'Content-Type': 'application/json;charset=UTF-8'
                             }
                         }).then(res => {
-                            const category = JSON.parse(res.data)
-                            if (category != null) {
+                            res = JSON.parse(res.data)
+                            if (res.status === 1) {
                                 notification.open({
-                                    message: '插入成功',
-                                    description: 'categoryId：' + category.id + ' categoryName: ' + category.name,
-                                });
+                                    message: '请求成功',
+                                    description: '服务器返回信息： ' + res.msg
+                                })
+                                window.location.href =  '/bk/category/list'
                             } else {
                                 notification.open({
-                                    message: '插入失败',
-                                    description: '请重新尝试',
-                                });
+                                    message: '请求失败',
+                                    description: '服务器返回信息： ' + res.msg
+                                })
                             }
                         }).catch(e => {
                             notification.open({
-                                message: '插入失败',
-                                description: '错误信息：' + e,
-                            });
+                                message: '请求失败',
+                                description: '服务器无响应：' + e,
+                            })
                         })
                     }}>提交</Button>
                 </div>

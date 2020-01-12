@@ -30,7 +30,7 @@ class ArticleAdd extends Component {
         this.setState({
             width: $(window).width() - $('#navigation_bk').width()
         })
-        if (this.state.id != undefined) {
+        if (this.state.id !== undefined) {
             axios.get(global.constants.server + "/article?id=" + this.state.id)
                 .then(res => {
                     res = JSON.parse(res.data)
@@ -97,9 +97,10 @@ class ArticleAdd extends Component {
             },
             "isPublic": isPublic
         }
-        if (this.state.id != undefined) {
+        if (this.state.id !== undefined) {
             data.id = this.state.id
             data.articleCategory.name = this.state.article.category.name
+            data.views = this.state.article.views
         }
         axios.post(global.constants.server + '/article/add', data)
             .then(res => {
@@ -109,6 +110,12 @@ class ArticleAdd extends Component {
                         message: '请求成功',
                         description: '服务器返回信息： ' + res.msg
                     })
+                    console.log(this.state.id)
+                    if (this.state.id !== undefined) {
+                        window.location.href =  '/bk/category/list'
+                    } else {
+                        window.location.reload()
+                    }
                 } else {
                     notification.open({
                         message: '请求失败',

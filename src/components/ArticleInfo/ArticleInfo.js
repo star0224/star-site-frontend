@@ -92,7 +92,7 @@ class ArticleInfo extends Component {
             } else if (thisTag.level > prevTagLevel) {
                 thisTag.parentId = anchorDOMFormat[anchorDOMFormat.length - 1].id
                 anchorDOMFormat.push(thisTag)
-            } else if (thisTag.level == prevTagLevel) {
+            } else if (thisTag.level === prevTagLevel) {
                 thisTag.parentId = anchorDOMFormat[anchorDOMFormat.length - 1].parentId
                 anchorDOMFormat.push(thisTag)
             } else if (thisTag.level < prevTagLevel) {
