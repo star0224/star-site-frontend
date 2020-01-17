@@ -121,7 +121,6 @@ class ArticleInfo extends Component {
             element.child = []
             anchorMap.set(element.id, element)
         })
-        console.log(anchorDOMFormat)
         let newData = []
         anchorDOMFormat.forEach(element => {
             if (element.parentId !== '0') {
