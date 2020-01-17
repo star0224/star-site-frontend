@@ -101,6 +101,7 @@ class Home extends Component {
             } else {
                 articleActivity.set(date.toLocaleDateString(), 1)
             }
+            return item
         })
 
         // 按星期将全年分成七份
@@ -146,34 +147,34 @@ class Home extends Component {
         switch (item.articleNum) {
             case 0:
                 return (
-                    <Tooltip mouseEnterDelay={0} mouseLeaveDelay={0} title={"No article on " + item.month + " " + item.date + ", " + item.year}>
+                    <Tooltip key={item.month + "-" + item.date + "-" + item.year} mouseEnterDelay={0} mouseLeaveDelay={0} title={"No article on " + item.month + " " + item.date + ", " + item.year}>
                         <div className="square"></div>
                     </Tooltip>
                 )
             case 1:
                 return (
-                    <Tooltip mouseEnterDelay={0} mouseLeaveDelay={0} title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
+                    <Tooltip key={item.month + "-" + item.date + "-" + item.year} mouseEnterDelay={0} mouseLeaveDelay={0} title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
                         <div className="square"
                              style={{backgroundColor: '#c6e48b'}}></div>
                     </Tooltip>
                 )
             case 2:
                 return (
-                    <Tooltip mouseEnterDelay={0} mouseLeaveDelay={0} title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
+                    <Tooltip key={item.month + "-" + item.date + "-" + item.year} mouseEnterDelay={0} mouseLeaveDelay={0} title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
                         <div className="square"
                              style={{backgroundColor: '#7bc96f'}}></div>
                     </Tooltip>
                 )
             case 3:
                 return (
-                    <Tooltip mouseEnterDelay={0} mouseLeaveDelay={0} title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
+                    <Tooltip key={item.month + "-" + item.date + "-" + item.year} mouseEnterDelay={0} mouseLeaveDelay={0} title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
                         <div className="square"
                              style={{backgroundColor: '#239a3b'}}></div>
                     </Tooltip>
                 )
             default:
                 return (
-                    <Tooltip mouseEnterDelay={0} mouseLeaveDelay={0} title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
+                    <Tooltip key={item.month + "-" + item.date + "-" + item.year} mouseEnterDelay={0} mouseLeaveDelay={0} title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
                         <div className="square"
                              style={{backgroundColor: '#196127'}}></div>
                     </Tooltip>
@@ -268,7 +269,7 @@ class Home extends Component {
                                     {
                                         ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].map(item => {
                                             return (
-                                                <div className="weekTitle">{item}</div>
+                                                <div className="weekTitle" key={item}>{item}</div>
                                             )
                                         })
                                     }

@@ -53,7 +53,7 @@ class Category extends Component {
             });
         })
         if (this.state.categorySelectedKeys !== "all_category") {
-            let target = "/article/category/?categoryId=" + this.state.categorySelectedKeys
+            let target = "/article/category/?categoryId=" + this.state.categorySelectedKeys + "&isPublic=1"
             if (this.state.isBackStage) {
                 target = "/article/category/?categoryId=" + this.state.categorySelectedKeys
             }
@@ -111,6 +111,7 @@ class Category extends Component {
         }
     }
 
+    // 处理分类点击事件
     handleClick = (e) => {
         const _this = this
         if (_this.isDeleteCategory) {
@@ -119,12 +120,17 @@ class Category extends Component {
             e.key = _this.state.categorySelectedKeys
             return
         }
+        console.log(e.key)
         switch (e.key) {
             case 'all_category':
                 _this.setState({
                     categorySelectedKeys: 'all_category'
                 })
-                axios.get(global.constants.server + "/article/list")
+                let target = "/article/list/public?isPublic=1"
+                if (this.state.isBackStage) {
+                    target = "/article/list"
+                }
+                axios.get(global.constants.server + target)
                     .then((res) => {
                         res = JSON.parse(res.data)
                         if (res.status === 1) {
@@ -148,7 +154,11 @@ class Category extends Component {
                 _this.setState({
                     categorySelectedKeys: e.key
                 })
-                axios.get(global.constants.server + "/article/category/?categoryId=" + e.key)
+                let targetUrl = "/article/category/?categoryId=" + e.key + "&isPublic=1"
+                if (this.state.isBackStage) {
+                    target = "/article/category/?categoryId=" + e.key
+                }
+                axios.get(global.constants.server + targetUrl)
                     .then((res) => {
                         res = JSON.parse(res.data)
                         if (res.status === 1) {
@@ -280,8 +290,6 @@ class Category extends Component {
     };
 
     render() {
-
-        const _this = this
 
         const IconText = ({type, text}) => (
             <span>
