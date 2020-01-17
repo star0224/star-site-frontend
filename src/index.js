@@ -4,6 +4,7 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import Router from "./router";
 import './config'
+import 'babel-polyfill'
 
 // 刷新回到页面顶部
 window.onload = () => {

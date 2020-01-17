@@ -13,7 +13,7 @@ class Footer extends Component {
                     by
                     <NavLink to="/"> Star</NavLink>
                 </div>
-                <div>Created ©2019 励世邦 苏ICP备18019123号</div>
+                <div>Created ©2019 励世邦 皖ICP备20001119号</div>
             </footer>
         );
     }

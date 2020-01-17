@@ -250,7 +250,7 @@ class Home extends Component {
                     <h2 id="blurBoxTitle">Star的初生之土 —— 纳沃利的普雷西典</h2>
                     <p>
                         <Button onClick={() => this.setState({visible: true})}>What's New</Button>
-                        <Button>Technic</Button>
+                        <Button onClick={() => window.location.href = '/category/list'}>Reading</Button>
                         <Popover content={contactContent} trigger="click" placement="right">
                             <Button type="primary">Contact Me</Button>
                         </Popover>
