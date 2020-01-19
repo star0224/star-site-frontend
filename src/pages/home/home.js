@@ -262,6 +262,7 @@ class Home extends Component {
                         <Col span={4}></Col>
                         <Col span={15}>
                             <h3 style={{marginTop: '20px', fontWeight: 'normal', textAlign: 'left'}}>
+                                <span id="teamcity"></span>
                                 {this.state.archives.length} Articles in {new Date().getFullYear()}
                             </h3>
                             <ul id="activities">

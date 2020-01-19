@@ -156,7 +156,7 @@ class Category extends Component {
                 })
                 let targetUrl = "/article/category/?categoryId=" + e.key + "&isPublic=1"
                 if (this.state.isBackStage) {
-                    target = "/article/category/?categoryId=" + e.key
+                    targetUrl = "/article/category/?categoryId=" + e.key
                 }
                 axios.get(global.constants.server + targetUrl)
                     .then((res) => {

@@ -11,7 +11,7 @@ import CategoryListBack from "./pages/categoryBack/categoryListBack/categoryList
 import CategoryList from "./pages/categoryList/categoryList";
 import Archive from "./pages/archive/archive";
 import Navigation from "./components/Navigation/Navigation";
-import {Button, Icon, Input} from "antd";
+import {Button, Icon, Input, notification} from "antd";
 import './router.css'
 import {loginInfo} from "./config";
 
@@ -61,6 +61,7 @@ function LoginPage() {
                 </div>
 
                 <Input
+                    id="backToken"
                     placeholder="请输入Token"
                     prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
                 />
@@ -68,7 +69,13 @@ function LoginPage() {
                 <div>
                     <Button onClick={() => {
                         loginInfo.logIn(() => {
-                            history.replace(from);
+                            if (document.getElementById('backToken').value === 'gx0224') {
+                                history.replace(from);
+                            } else {
+                                notification.open({
+                                    message: '请输入正确Token'
+                                })
+                            }
                         })
                     }} type='primary'>Go~</Button>
                 </div>
