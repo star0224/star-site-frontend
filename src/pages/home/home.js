@@ -18,7 +18,8 @@ class Home extends Component {
             visible: false,
             articleDate: [
                 [], [], [], [], [], [], []
-            ]
+            ],
+
         }
     }
 
@@ -58,11 +59,11 @@ class Home extends Component {
                 }
                 this.generateActivities()
             }).catch(e => {
-            notification.open({
-                message: '请求失败',
-                description: '服务器无响应：' + e,
-            });
-        })
+                notification.open({
+                    message: '请求失败',
+                    description: '服务器无响应：' + e,
+                });
+            })
     }
 
     generateActivities = () => {

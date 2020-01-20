@@ -1,5 +1,5 @@
 global.constants = {
-    server: 'http://localhost:8080',
+    server: 'http://116.62.123.56:8080',
 }
 
 export const loginInfo = {

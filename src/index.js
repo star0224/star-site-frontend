@@ -5,6 +5,7 @@ import * as serviceWorker from './serviceWorker';
 import Router from "./router";
 import './config'
 import 'babel-polyfill'
+import 'antd-mobile/dist/antd-mobile.css'
 
 // 刷新回到页面顶部
 window.onload = () => {

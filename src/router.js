@@ -14,43 +14,73 @@ import Navigation from "./components/Navigation/Navigation";
 import {Button, Icon, Input, notification} from "antd";
 import './router.css'
 import {loginInfo} from "./config";
+import HomeMobile from "./pages/homeMobile/homeMobile";
+import NoMatchMobile from "./pages/404Mobile/noMatchMobile";
 
 export default class Router extends Component {
 
-    render() {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isMobile: false
+        }
+    }
 
-        return (
-            <BrowserRouter>
-                <App>
-                    <Switch>
-                        <Route exact path="/" component={Home}/>
-                        <Route path="/login" render={() => <LoginPage/>}/>
-                        <Route path="/category/list" component={CategoryList}/>
-                        <Route path="/category/:id" component={CategoryList}/>
-                        <Route path="/archive" component={Archive}/>
-                        <Route path="/article/:id" component={ArticleInfo}/>
-                        <PrivateRoute path="/bk">
-                            <Switch>
-                                <Route exact path="/bk" component={HomeBack} />
-                                <Route path="/bk/article/add/new" component={ArticleAdd}/>
-                                <Route path="/bk/article/add/:id" component={ArticleAdd}/>
-                                <Route path="/bk/category/add" component={CategoryAddBack}/>
-                                <Route path="/bk/category/list" component={CategoryListBack}/>
-                                <Route path="/bk/category/:id" component={CategoryListBack}/>
-                            </Switch>
-                        </PrivateRoute>
-                        <Route component={NoMatch}/>
-                    </Switch>
-                </App>
-            </BrowserRouter>
-        )
+    componentDidMount() {
+        // 移动端判断逻辑：UA中出现Mobile或者Android则判定为移动端
+        let userAgent = navigator.userAgent
+        let isMobile = (userAgent.split("Mobile").length >= 2 || userAgent.split("Android").length >= 2)
+        this.setState({
+            isMobile
+        })
+    }
+
+    render() {
+        if (!this.state.isMobile) {
+            return (
+                <BrowserRouter>
+                    <App>
+                        <Switch>
+                            <Route exact path="/" component={Home}/>
+                            <Route path="/login" render={() => <LoginPage/>}/>
+                            <Route path="/category/list" component={CategoryList}/>
+                            <Route path="/category/:id" component={CategoryList}/>
+                            <Route path="/archive" component={Archive}/>
+                            <Route path="/article/:id" component={ArticleInfo}/>
+                            <PrivateRoute path="/bk">
+                                <Switch>
+                                    <Route exact path="/bk" component={HomeBack}/>
+                                    <Route path="/bk/article/add/new" component={ArticleAdd}/>
+                                    <Route path="/bk/article/add/:id" component={ArticleAdd}/>
+                                    <Route path="/bk/category/add" component={CategoryAddBack}/>
+                                    <Route path="/bk/category/list" component={CategoryListBack}/>
+                                    <Route path="/bk/category/:id" component={CategoryListBack}/>
+                                </Switch>
+                            </PrivateRoute>
+                            <Route component={NoMatch}/>
+                        </Switch>
+                    </App>
+                </BrowserRouter>
+            )
+        } else {
+            return (
+                <BrowserRouter>
+                    <div>
+                        <Switch>
+                            <Route exact path="/" component={HomeMobile}/>
+                            <Route component={NoMatchMobile}/>
+                        </Switch>
+                    </div>
+                </BrowserRouter>
+            )
+        }
     }
 }
 
 function LoginPage() {
     let history = useHistory();
     let location = useLocation();
-    let { from } = location.state || { from: { pathname: "/" } };
+    let {from} = location.state || {from: {pathname: "/"}};
     return (
         <div id="loginPage">
             <Navigation/>
@@ -87,14 +117,14 @@ function LoginPage() {
 function PrivateRoute({children}) {
     return (
         <Route
-            render={({ location }) =>
+            render={({location}) =>
                 loginInfo.isLogin ? (
                     children
                 ) : (
                     <Redirect
                         to={{
                             pathname: "/login",
-                            state: { from: location }
+                            state: {from: location}
                         }}
                     />
                 )

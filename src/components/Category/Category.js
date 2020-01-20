@@ -120,7 +120,6 @@ class Category extends Component {
             e.key = _this.state.categorySelectedKeys
             return
         }
-        console.log(e.key)
         switch (e.key) {
             case 'all_category':
                 _this.setState({
