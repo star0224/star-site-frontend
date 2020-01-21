@@ -66,7 +66,7 @@ class Navigation extends Component {
     render() {
         return (
             <Menu id="menu" className="transparent" onClick={this.handleClick} selectedKeys={[this.state.current]}
-                  mode="horizontal">
+                  mode="horizontal" style={{lineHeight: '55px'}}>
                 <Menu.Item id="logoItem" key="logo">
                     <NavLink to="/">
                         {/*<Icon id="logo" type="star" theme="twoTone"/>*/}

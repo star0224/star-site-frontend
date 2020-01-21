@@ -159,7 +159,7 @@ class ArticleInfo extends Component {
                                     </NavLink>
                                 </Breadcrumb.Item>
                             </Breadcrumb>
-                            <Anchor targetOffset={this.state.targetOffset} affix={false}>
+                            <Anchor style={{backgroundColor: '#f5f5f9'}} targetOffset={this.state.targetOffset} affix={false}>
                                 {
                                     anchor.map((item, index) => {
                                         return (

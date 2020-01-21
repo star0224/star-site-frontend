@@ -181,6 +181,8 @@
     animation: rotate 0.75s linear infinite;
     transform-origin: 50% 50%;
     border-radius: 10px;
+    position: relative;
+    top: 1.5px;
 }
 
 @keyframes rotate {

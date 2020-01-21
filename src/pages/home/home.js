@@ -38,6 +38,7 @@ class Home extends Component {
                         description: '服务器返回信息： ' + res.msg
                     })
                 }
+                this.generateActivities()
             }).catch(e => {
             notification.open({
                 message: '请求失败',
@@ -57,7 +58,6 @@ class Home extends Component {
                         description: '服务器返回信息： ' + res.msg
                     })
                 }
-                this.generateActivities()
             }).catch(e => {
                 notification.open({
                     message: '请求失败',

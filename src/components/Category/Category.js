@@ -305,7 +305,7 @@ class Category extends Component {
                     if (this.state.categoryList.length <= 0)
                         return
                     let selectedCategory = this.state.categoryList.find(text => text.id == this.state.categorySelectedKeys)
-                    return selectedCategory.name
+                    return selectedCategory !== undefined ? selectedCategory.name : ''
             }
         }
 
@@ -318,7 +318,7 @@ class Category extends Component {
                 ...this.getColumnSearchProps('title'),
                 render: (text, record) => <NavLink to={"/article/" + record.id}>{text}</NavLink>
             }, {
-                title: 'Date',
+                title: '日期',
                 dataIndex: 'date',
                 align: 'center',
                 width: '25%',
@@ -326,7 +326,7 @@ class Category extends Component {
                 render: text => <IconText type="calendar" text={text} key="calendar"/>
 
             }, {
-                title: 'Views',
+                title: '访问量',
                 dataIndex: 'views',
                 key: 'views',
                 width: '25%',
@@ -500,7 +500,7 @@ class Category extends Component {
                     <Menu
                         id="categoryMenu"
                         onClick={this.handleClick}
-                        style={{paddingTop: '5px', overflowY: 'scroll', scrollbarWidth: 'none', overflowX: 'hidden'}}
+                        style={{paddingTop: '5px', overflowY: 'scroll', scrollbarWidth: 'none', overflowX: 'hidden', backgroundColor: '#f5f5f9'}}
                         defaultSelectedKeys={[this.state.categorySelectedKeys]}
                         mode="inline">
                         <Menu.Item key="all_category">
