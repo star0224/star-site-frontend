@@ -1,0 +1,17 @@
+.versionInfoBtn:hover {
+    cursor: pointer;
+}
+
+.versionInfoBtn {
+    position: relative;
+    margin-left: 20px;
+    border: none;
+    top: 0px;
+    background-color: rgb(245, 245, 249);
+}
+
+.versionInfo {
+    margin-bottom: 20px;
+    margin-left: 30px;
+    width: 35vw;
+}

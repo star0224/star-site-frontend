@@ -53,6 +53,10 @@
     background-color: #ffffff !important;
 }
 
+#menu > li {
+    transition: all 0s;
+}
+
 #logo {
     margin: 0px;
 }
@@ -60,7 +64,8 @@
 #logoItem {
     color: #ffffff00;
     border-bottom: 2px solid #ffffff00;
-    transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out !important;
+    border: none !important;
 }
 
 #logoItem:hover {

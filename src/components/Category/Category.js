@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {Button, Col, Divider, Icon, Input, Menu, Modal, notification, Row, Table} from "antd";
 import axios from 'axios'
-import {NavLink} from "react-router-dom";
+import {NavLink, withRouter} from "react-router-dom";
 import Highlighter from 'react-highlight-words';
 import './index.css'
 import $ from 'jquery'
 import Footer from "../Footer/Footer";
+import {loginInfo} from "../../config";
+
 
 class Category extends Component {
 
@@ -25,7 +27,9 @@ class Category extends Component {
             searchedColumn: '',
             articleModalVisible: false,
             articleModalConfirmLoading: false,
-            deleteArticleId: ''
+            deleteArticleId: '',
+            articleLoaded: false,
+            categoryLoaded: false,
         }
     }
 
@@ -38,7 +42,8 @@ class Category extends Component {
                 res = JSON.parse(res.data)
                 if (res.status === 1) {
                     _this.setState({
-                        categoryList: res.data
+                        categoryList: res.data,
+                        categoryLoaded: true
                     })
                 } else {
                     notification.open({
@@ -62,7 +67,8 @@ class Category extends Component {
                     res = JSON.parse(res.data)
                     if (res.status === 1) {
                         _this.setState({
-                            articleList: res.data
+                            articleList: res.data,
+                            articleLoaded: true
                         })
                     } else {
                         notification.open({
@@ -86,7 +92,8 @@ class Category extends Component {
                     res = JSON.parse(res.data)
                     if (res.status === 1) {
                         _this.setState({
-                            articleList: res.data
+                            articleList: res.data,
+                            articleLoaded: true
                         })
                     } else {
                         notification.open({
@@ -105,9 +112,9 @@ class Category extends Component {
 
     redirect2ThisPage = () => {
         if (this.state.categorySelectedKeys === 'all_category') {
-            window.location.href = '/bk/category/list'
+            this.props.history.push('/bk/category/list')
         } else {
-            window.location.href = '/bk/category/' + this.state.categorySelectedKeys
+            this.props.history.push('/bk/category/' + this.state.categorySelectedKeys)
         }
     }
 
@@ -199,7 +206,8 @@ class Category extends Component {
                         message: '请求成功',
                         description: '服务器返回信息： ' + res.msg
                     });
-                    window.location.href = '/bk/category/list'
+                    this.props.history.push('/bk/category/list')
+                    this.state.categoryList.splice(this.state.categoryList.findIndex(item => item.id === this.deleteCategoryId), 1)
                 } else {
                     notification.open({
                         message: '请求失败',
@@ -376,6 +384,7 @@ class Category extends Component {
                                                     message: '请求成功',
                                                     description: '服务器返回信息： ' + res.msg
                                                 });
+                                                this.state.articleList[this.state.articleList.findIndex(item => item.id === record.id)].isPublic = '0'
                                                 this.redirect2ThisPage()
                                             } else {
                                                 notification.open({
@@ -411,6 +420,7 @@ class Category extends Component {
                                                     message: '请求成功',
                                                     description: '服务器返回信息： ' + res.msg
                                                 });
+                                                this.state.articleList[this.state.articleList.findIndex(item => item.id === record.id)].isPublic = '1'
                                                 this.redirect2ThisPage()
                                             } else {
                                                 notification.open({
@@ -440,7 +450,7 @@ class Category extends Component {
         ];
 
         return (
-            <Row>
+            <Row type="flex" align="center" justify="center">
                 <Modal
                     title="Warning"
                     visible={this.state.visible}
@@ -465,6 +475,7 @@ class Category extends Component {
                                         message: '请求成功',
                                         description: '服务器返回信息： ' + res.msg
                                     });
+                                    this.state.articleList.splice(this.state.articleList.findIndex(item => item.id === this.state.deleteArticleId), 1)
                                     this.redirect2ThisPage()
                                 } else {
                                     notification.open({
@@ -500,13 +511,19 @@ class Category extends Component {
                     <Menu
                         id="categoryMenu"
                         onClick={this.handleClick}
-                        style={{paddingTop: '5px', overflowY: 'scroll', scrollbarWidth: 'none', overflowX: 'hidden', backgroundColor: '#f5f5f9'}}
+                        style={{
+                            paddingTop: '5px',
+                            overflowY: 'scroll',
+                            scrollbarWidth: 'none',
+                            overflowX: 'hidden',
+                            backgroundColor: '#f5f5f9'
+                        }}
                         defaultSelectedKeys={[this.state.categorySelectedKeys]}
                         mode="inline">
                         <Menu.Item key="all_category">
                             全部分类
                         </Menu.Item>
-                        <Divider style={{margin: "10px 0px 10px 0px"}}/>
+                        <Divider style={{margin: "-3px 0px 10px 0px"}}/>
                         {this.state.categoryList.map(item => {
                             if (this.state.isBackStage) {
                                 return (
@@ -538,8 +555,15 @@ class Category extends Component {
                     </Menu>
                 </Col>
                 <Col span={20}>
-                    <Table columns={this.state.isBackStage ? backColumns : columns}
-                           dataSource={this.state.articleList}/>
+                    {!this.state.articleLoaded ?
+                        <div>
+                            <Row style={{height: '80vh'}} type="flex" justify="center" align="middle">
+                                <span style={{top: '-4px'}} id='teamcity'></span>
+                                <h2 style={{marginLeft: '10px'}}>正在加载，请稍等~</h2>
+                            </Row>
+                        </div>
+                        : <Table columns={this.state.isBackStage ? backColumns : columns}
+                                 dataSource={this.state.articleList}/>}
                 </Col>
                 {this.state.isBackStage ? "" : <Footer/>}
             </Row>
@@ -547,4 +571,4 @@ class Category extends Component {
     }
 }
 
-export default Category;
+export default withRouter(Category);

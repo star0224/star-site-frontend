@@ -19,7 +19,12 @@ class Home extends Component {
             articleDate: [
                 [], [], [], [], [], [], []
             ],
-
+            versionInfos: [{
+                version: '',
+                date: '',
+                contents: []
+            }],
+            loaded: false
         }
     }
 
@@ -59,11 +64,30 @@ class Home extends Component {
                     })
                 }
             }).catch(e => {
-                notification.open({
-                    message: '请求失败',
-                    description: '服务器无响应：' + e,
-                });
-            })
+            notification.open({
+                message: '请求失败',
+                description: '服务器无响应：' + e,
+            });
+        })
+        axios.get(global.constants.server + "/versionInfo/all")
+            .then(res => {
+                res = JSON.parse(res.data)
+                if (res.status === 1) {
+                    this.setState({
+                        versionInfos: res.data
+                    })
+                } else {
+                    notification.open({
+                        message: '请求失败',
+                        description: '服务器返回信息： ' + res.msg
+                    })
+                }
+            }).catch(e => {
+            notification.open({
+                message: '请求失败',
+                description: '服务器无响应：' + e,
+            });
+        })
     }
 
     generateActivities = () => {
@@ -115,7 +139,8 @@ class Home extends Component {
         this.generateWeeksInYear(fri, firstWeek[6], lastWeek[6], articleActivity)
         this.generateWeeksInYear(sat, firstWeek[7], lastWeek[7], articleActivity)
         this.setState({
-            articleDate: [sun, mon, tue, wed, thu, fri, sat]
+            articleDate: [sun, mon, tue, wed, thu, fri, sat],
+            loaded: true
         })
     }
 
@@ -148,34 +173,44 @@ class Home extends Component {
         switch (item.articleNum) {
             case 0:
                 return (
-                    <Tooltip key={item.month + "-" + item.date + "-" + item.year} mouseEnterDelay={0} mouseLeaveDelay={0} title={"No article on " + item.month + " " + item.date + ", " + item.year}>
+                    <Tooltip key={item.month + "-" + item.date + "-" + item.year} mouseEnterDelay={0}
+                             mouseLeaveDelay={0}
+                             title={"No article on " + item.month + " " + item.date + ", " + item.year}>
                         <div className="square"></div>
                     </Tooltip>
                 )
             case 1:
                 return (
-                    <Tooltip key={item.month + "-" + item.date + "-" + item.year} mouseEnterDelay={0} mouseLeaveDelay={0} title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
+                    <Tooltip key={item.month + "-" + item.date + "-" + item.year} mouseEnterDelay={0}
+                             mouseLeaveDelay={0}
+                             title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
                         <div className="square"
                              style={{backgroundColor: '#c6e48b'}}></div>
                     </Tooltip>
                 )
             case 2:
                 return (
-                    <Tooltip key={item.month + "-" + item.date + "-" + item.year} mouseEnterDelay={0} mouseLeaveDelay={0} title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
+                    <Tooltip key={item.month + "-" + item.date + "-" + item.year} mouseEnterDelay={0}
+                             mouseLeaveDelay={0}
+                             title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
                         <div className="square"
                              style={{backgroundColor: '#7bc96f'}}></div>
                     </Tooltip>
                 )
             case 3:
                 return (
-                    <Tooltip key={item.month + "-" + item.date + "-" + item.year} mouseEnterDelay={0} mouseLeaveDelay={0} title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
+                    <Tooltip key={item.month + "-" + item.date + "-" + item.year} mouseEnterDelay={0}
+                             mouseLeaveDelay={0}
+                             title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
                         <div className="square"
                              style={{backgroundColor: '#239a3b'}}></div>
                     </Tooltip>
                 )
             default:
                 return (
-                    <Tooltip key={item.month + "-" + item.date + "-" + item.year} mouseEnterDelay={0} mouseLeaveDelay={0} title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
+                    <Tooltip key={item.month + "-" + item.date + "-" + item.year} mouseEnterDelay={0}
+                             mouseLeaveDelay={0}
+                             title={item.articleNum + " article on " + item.month + " " + item.date + ", " + item.year}>
                         <div className="square"
                              style={{backgroundColor: '#196127'}}></div>
                     </Tooltip>
@@ -216,29 +251,29 @@ class Home extends Component {
             <div>
                 <Drawer
                     width={350}
-                    title="Star Blog V1.0"
+                    title={"Star's First Land V" + this.state.versionInfos[0].version}
                     placement="right"
                     closable={false}
                     onClose={() => this.setState({visible: false})}
                     visible={this.state.visible}
                 >
                     <div>
-                        <h3>1.0版本增加了：</h3>
-                        <Divider style={{margin: '10px 0px 10px 0px'}}/>
-                        <ul style={{listStyle: 'none', paddingLeft: '5px', marginBottom: '50px'}}>
-                            <li style={{marginBottom: '5px'}}>1. 文章分类页面</li>
-                            <li style={{marginBottom: '5px'}}>2. 文章锚点自动生成算法</li>
-                            <li style={{marginBottom: '5px'}}>3. 后台文章及分类管理</li>
-                            <li style={{marginBottom: '5px'}}>4. 仪表盘功能</li>
-                        </ul>
-                        <h3>预计在下版本上线：</h3>
-                        <Divider style={{margin: '10px 0px 10px 0px'}}/>
-                        <ul style={{listStyle: 'none', paddingLeft: '5px', marginBottom: '50px'}}>
-                            <li style={{marginBottom: '5px'}}>1. 文章标签实现可伸缩</li>
-                            <li style={{marginBottom: '5px'}}>2. 分类页面优化</li>
-                            <li style={{marginBottom: '5px'}}>3. 移动端适配</li>
-                            <li style={{marginBottom: '5px'}}>4. 留言功能</li>
-                        </ul>
+                        {this.state.versionInfos.map(versionInfo => {
+                            return (
+                                <div>
+                                    <h3 style={{display: 'inline'}}>{"V" + versionInfo.version}</h3>
+                                    <span style={{marginLeft: '20px'}}>
+                                        {versionInfo.date}
+                                    </span>
+                                    <Divider style={{margin: '10px 0px 10px 0px'}}/>
+                                    <ul style={{listStyle: 'none', paddingLeft: '5px', marginBottom: '50px'}}>
+                                        {versionInfo.contents.map(content => {
+                                            return <li style={{marginBottom: '5px'}}>{content}</li>
+                                        })}
+                                    </ul>
+                                </div>
+                            )
+                        })}
                     </div>
                 </Drawer>
 
@@ -258,7 +293,14 @@ class Home extends Component {
                         </Popover>
                     </p>
                 </div>
-                <div id="content">
+                {!this.state.loaded ? (
+                    <div style={{height: '100vh', position: 'absolute', top: '100vh', width: '100vw', backgroundColor: '#f6f6f6'}} >
+                        <Row style={{height: '100vh'}} type="flex" justify="center" align="middle">
+                            <span style={{top: '-4px'}} id='teamcity'></span>
+                            <h2 style={{marginLeft: '10px'}}>正在加载，请稍等~</h2>
+                        </Row>
+                    </div>
+                ) : (<div id="content">
                     <Row>
                         <Col span={4}></Col>
                         <Col span={15}>
@@ -395,10 +437,10 @@ class Home extends Component {
                         <Col span={3}>
                         </Col>
                     </Row>
-                    <Row>
+                    <Row style={{marginTop: '50px'}}>
                         <Footer/>
                     </Row>
-                </div>
+                </div>)}
             </div>
         );
     }

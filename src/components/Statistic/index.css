@@ -1,25 +1,4 @@
-#articleStatisticTotal > div {
-    text-align: center;
-}
-
-#articleStatistic > div:first-child {
-    margin-left: 0px;
-}
-
-#articleStatistic > div {
-    display: inline-block;
-    margin-right: 20px;
-    margin-left: 20px;
-    text-align: center;
-}
-
-#articleStatisticCol {
-    margin: 20px 0px 0px 20px;
-}
-
-#articleStatistic > span {
-    border-right: 1px solid #e8e8e8;
-    position: absolute;
-    top: 10px;
-    height: 80%;
+.statisticCard {
+    border-radius: 5px;
+    color: white !important;
 }

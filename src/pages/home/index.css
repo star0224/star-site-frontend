@@ -171,7 +171,8 @@
 #teamcity {
     content: none;
     -webkit-mask-image: radial-gradient(8px, transparent 71.875%, white 78.125%);
-    background-image: conic-gradient(#ff00eb, #bd3bff, #008eff, #58ba00, #f48700, #ff00eb);
+    mask: radial-gradient(8px, transparent 71.875%, white 78.125%);
+    background: conic-gradient(#ff00eb, #bd3bff, #008eff, #58ba00, #f48700, #ff00eb);
     display: inline-block;
     margin-right: 5px;
     width: 16px;

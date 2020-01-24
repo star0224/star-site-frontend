@@ -1,0 +1,23 @@
+#mobileArticle {
+    padding: 20px;
+}
+
+#mobileArticleTitle {
+    font-size: 40px;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    display: inline;
+    position: relative;
+    top: 3px;
+}
+
+#mobileArticleDate {
+    font-size: 20px;
+    margin-top: 15px;
+}
+
+#mobileTitleDivider {
+    border-left: 1px solid #404040;
+    margin: 0px 35px;
+    font-size: 25px;
+}

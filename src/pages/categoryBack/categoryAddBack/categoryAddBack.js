@@ -3,6 +3,7 @@ import NavigationBack from "../../../components/Navigation_Back/NavigationBack";
 import {Button, Input, notification} from "antd";
 import './index.css'
 import axios from 'axios'
+import {withRouter} from "react-router-dom";
 
 class CategoryAddBack extends Component {
     constructor(props) {
@@ -40,7 +41,7 @@ class CategoryAddBack extends Component {
                                     message: '请求成功',
                                     description: '服务器返回信息： ' + res.msg
                                 })
-                                window.location.href =  '/bk/category/list'
+                                this.props.history.push('/bk/category/list')
                             } else {
                                 notification.open({
                                     message: '请求失败',
@@ -60,4 +61,4 @@ class CategoryAddBack extends Component {
     }
 }
 
-export default CategoryAddBack;
+export default withRouter(CategoryAddBack);

@@ -10,7 +10,8 @@ class Navigation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            current: props.current
+            current: props.current,
+            showLogin: props.showLogin,
         }
     }
 
@@ -70,7 +71,7 @@ class Navigation extends Component {
                 <Menu.Item id="logoItem" key="logo">
                     <NavLink to="/">
                         {/*<Icon id="logo" type="star" theme="twoTone"/>*/}
-                        <img alt="star" src={require('../../assets/star.svg')} />
+                        <img alt="star" src={require('../../assets/star.svg')}/>
                     </NavLink>
                 </Menu.Item>
                 <Menu.Item key="home" title="首页">
@@ -88,11 +89,19 @@ class Navigation extends Component {
                         归档
                     </NavLink>
                 </Menu.Item>
-                <Menu.Item key="bk">
-                    <NavLink to="/bk">
-                        后台
-                    </NavLink>
-                </Menu.Item>
+                {!this.state.showLogin === true ? (
+                    <Menu.Item key="bk">
+                        <NavLink to="/bk">
+                            后台
+                        </NavLink>
+                    </Menu.Item>) : ''}
+                {this.state.showLogin === true ? (
+                    <Menu.Item key="login">
+                        <NavLink to="/login">
+                            登录
+                        </NavLink>
+                    </Menu.Item>
+                ) : ''}
                 <Menu.Item id="searchMenu" key="search">
                     <Search id="search" enterButton onSearch={value => console.log(value)}/>
                 </Menu.Item>

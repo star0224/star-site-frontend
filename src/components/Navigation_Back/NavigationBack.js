@@ -32,6 +32,14 @@ class NavigationBack extends Component {
                         <Icon type="arrow-left"/>
                     </NavLink>
                 </Menu.Item>
+                <Menu.Item key="dashboard">
+                    <NavLink to="/bk">
+                        <span>
+                            <Icon type="dashboard"/>
+                            <span>仪表板</span>
+                        </span>
+                    </NavLink>
+                </Menu.Item>
                 <SubMenu key="article" title={
                     <span>
                         <Icon type="file-text"/>
@@ -67,6 +75,18 @@ class NavigationBack extends Component {
                     <Menu.Item key="category_add" title="Add 增加">
                         <NavLink to="/bk/category/add">
                             Category Add 增加
+                        </NavLink>
+                    </Menu.Item>
+                </SubMenu>
+                <SubMenu key="version" title={
+                    <span>
+                        <Icon type="ordered-list"/>
+                        <span>版本</span>
+                    </span>
+                }>
+                    <Menu.Item key="version_detail" title="Version Info 版本信息">
+                        <NavLink to="/bk/version">
+                            Version Info 版本信息
                         </NavLink>
                     </Menu.Item>
                 </SubMenu>

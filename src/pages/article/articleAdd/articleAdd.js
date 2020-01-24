@@ -3,8 +3,11 @@ import NavigationBack from "../../../components/Navigation_Back/NavigationBack"
 import MdEditor from "for-editor"
 import $ from 'jquery'
 import './index.css'
-import {Button, Input, notification, Select} from "antd"
+import {Button, DatePicker, Input, notification, Select} from "antd"
 import axios from "axios"
+import {withRouter} from "react-router-dom";
+import locale from "antd/es/date-picker/locale/zh_CN";
+import moment from "moment";
 
 const {Option} = Select;
 
@@ -17,11 +20,14 @@ class ArticleAdd extends Component {
             inputValue: '',
             categoryId: '',
             categoryList: [],
+            date: new Date().toLocaleDateString().replace('/', '-').replace('/', '-'),
             id: props.match.params.id,
             articleTitle: '',
             article: {
-                category: {}
-            }
+                category: {},
+                date: ''
+            },
+            loaded: false
         }
     }
 
@@ -41,9 +47,11 @@ class ArticleAdd extends Component {
                             categoryList: [
                                 article.category
                             ],
+                            date: article.date,
                             value: article.content,
                             categoryId: article.category.id,
-                            articleTitle: article.title
+                            articleTitle: article.title,
+                            loaded: true
                         })
                     } else {
                         notification.open({
@@ -90,12 +98,13 @@ class ArticleAdd extends Component {
     // 保存事件
     saveArticle = (isPublic) => {
         let data = {
-            "title": this.state.articleTitle,
-            "content": this.state.value,
-            "articleCategory": {
-                "id": this.state.categoryId,
+            title: this.state.articleTitle,
+            content: this.state.value,
+            articleCategory: {
+                id: this.state.categoryId,
             },
-            "isPublic": isPublic
+            isPublic: isPublic,
+            date: this.state.date
         }
         if (this.state.id !== undefined) {
             data.id = this.state.id
@@ -110,12 +119,8 @@ class ArticleAdd extends Component {
                         message: '请求成功',
                         description: '服务器返回信息： ' + res.msg
                     })
-                    console.log(this.state.id)
-                    if (this.state.id !== undefined) {
-                        window.location.href =  '/bk/category/list'
-                    } else {
-                        window.location.reload()
-                    }
+                    this.props.history.push('/bk/category/list')
+
                 } else {
                     notification.open({
                         message: '请求失败',
@@ -175,6 +180,22 @@ class ArticleAdd extends Component {
                                 })
                             }
                         </Select>
+                        <span style={{marginLeft: '30px'}}>日期：</span>
+                        {!this.state.loaded ?
+                            <DatePicker locale={locale}
+                                        defaultValue={moment(new Date().toLocaleDateString().replace('/', '-').replace('/', '-'))}
+                                        onChange={(date, dateString) => {
+                                            this.setState({
+                                                date: dateString
+                                            })
+                                        }}/> :
+                            <DatePicker locale={locale} value={moment(this.state.date, 'YYYY-MM-DD')}
+                                        format='YYYY-MM-DD' onChange={(date, dateString) => {
+                                this.setState({
+                                    date: dateString
+                                })
+                            }}/>
+                        }
                     </div>
                     <MdEditor
                         style={{height: '500px'}}
@@ -190,4 +211,4 @@ class ArticleAdd extends Component {
     }
 }
 
-export default ArticleAdd;
+export default withRouter(ArticleAdd);

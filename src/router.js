@@ -1,28 +1,47 @@
 import React, {Component} from 'react';
 import {BrowserRouter, Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
-import Home from "./pages/home/home";
-import App from "./App";
-import HomeBack from "./pages/home_back/homeBack";
-import ArticleAdd from "./pages/article/articleAdd/articleAdd";
-import ArticleInfo from "./components/ArticleInfo/ArticleInfo";
-import NoMatch from "./pages/404/noMatch";
-import CategoryAddBack from "./pages/categoryBack/categoryAddBack/categoryAddBack";
-import CategoryListBack from "./pages/categoryBack/categoryListBack/categoryListBack";
-import CategoryList from "./pages/categoryList/categoryList";
-import Archive from "./pages/archive/archive";
-import Navigation from "./components/Navigation/Navigation";
-import {Button, Icon, Input, notification} from "antd";
+import {Button, Icon, Input, Modal, notification} from "antd";
 import './router.css'
 import {loginInfo} from "./config";
-import HomeMobile from "./pages/homeMobile/homeMobile";
-import NoMatchMobile from "./pages/404Mobile/noMatchMobile";
+import loadable from "./utils/loadable";
+import App from "./App";
+// import ArticleMobile from "./pages/articleMobile/articleMobile";
+// import Version from "./pages/version/version";
+// import CategoryList from "./pages/categoryList/categoryList";
+// import Archive from "./pages/archive/archive";
+// import ArticleInfo from "./components/ArticleInfo/ArticleInfo";
+// import HomeBack from "./pages/homeBack/homeBack";
+// import ArticleAdd from "./pages/article/articleAdd/articleAdd";
+// import CategoryAddBack from "./pages/categoryBack/categoryAddBack/categoryAddBack";
+// import CategoryListBack from "./pages/categoryBack/categoryListBack/categoryListBack";
+// import NoMatch from "./pages/404/noMatch";
+// import HomeMobile from "./pages/homeMobile/homeMobile";
+// import NoMatchMobile from "./pages/404Mobile/noMatchMobile";
+// import Navigation from "./components/Navigation/Navigation";
+
+const Home = loadable(() => import('./pages/home/home'))
+const CategoryList = loadable(() => import('./pages/categoryList/categoryList'))
+const Archive = loadable(() => import('./pages/archive/archive'))
+const CategoryListBack = loadable(() => import('./pages/categoryBack/categoryListBack/categoryListBack'))
+const CategoryAddBack = loadable(() => import('./pages/categoryBack/categoryAddBack/categoryAddBack'))
+const NoMatch = loadable(() => import('./pages/404/noMatch'))
+const HomeBack = loadable(() => import('./pages/homeBack/homeBack'))
+const ArticleAdd = loadable(() => import('./pages/article/articleAdd/articleAdd'))
+const ArticleInfo = loadable(() => import('./components/ArticleInfo/ArticleInfo'))
+const Navigation = loadable(() => import('./components/Navigation/Navigation'))
+const HomeMobile = loadable(() => import('./pages/homeMobile/homeMobile'))
+const NoMatchMobile = loadable(() => import('./pages/404Mobile/noMatchMobile'))
+const Version = loadable(() => import('./pages/version/version'))
+const ArticleMobile = loadable(() => import('./pages/articleMobile/articleMobile'))
+
 
 export default class Router extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            isMobile: false
+            isMobile: false,
+            visible: false
         }
     }
 
@@ -33,11 +52,17 @@ export default class Router extends Component {
         this.setState({
             isMobile
         })
+        window.onbeforeunload = (e) => {
+            if (loginInfo.isLogin) {
+                return ''
+            }
+        }
     }
 
     render() {
         if (!this.state.isMobile) {
             return (
+                // PC端
                 <BrowserRouter>
                     <App>
                         <Switch>
@@ -55,6 +80,7 @@ export default class Router extends Component {
                                     <Route path="/bk/category/add" component={CategoryAddBack}/>
                                     <Route path="/bk/category/list" component={CategoryListBack}/>
                                     <Route path="/bk/category/:id" component={CategoryListBack}/>
+                                    <Route path="/bk/version" component={Version}/>
                                 </Switch>
                             </PrivateRoute>
                             <Route component={NoMatch}/>
@@ -64,10 +90,12 @@ export default class Router extends Component {
             )
         } else {
             return (
+                // 移动端
                 <BrowserRouter>
                     <div>
                         <Switch>
                             <Route exact path="/" component={HomeMobile}/>
+                            <Route path="/mobile/article/:id" component={ArticleMobile}/>
                             <Route component={NoMatchMobile}/>
                         </Switch>
                     </div>
@@ -83,7 +111,7 @@ function LoginPage() {
     let {from} = location.state || {from: {pathname: "/"}};
     return (
         <div id="loginPage">
-            <Navigation/>
+            <Navigation current="login" showLogin={true}/>
 
             <div id="loginSquare">
                 <div id="loginText">

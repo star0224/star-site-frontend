@@ -17,10 +17,7 @@ class Archive extends Component {
             <div>
                 <Navigation current="archive"/>
                 <div id="archive">
-                    {/*<StarStatistic />*/}
-                    <div style={{flexDirection: "column", display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}>
-                        <h1>正在维护中...</h1>
-                    </div>
+                    <StarStatistic />
                 </div>
             </div>
         );
