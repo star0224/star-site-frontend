@@ -6,7 +6,6 @@ import Highlighter from 'react-highlight-words';
 import './index.css'
 import $ from 'jquery'
 import Footer from "../Footer/Footer";
-import {loginInfo} from "../../config";
 
 
 class Category extends Component {
@@ -206,7 +205,7 @@ class Category extends Component {
                         message: '请求成功',
                         description: '服务器返回信息： ' + res.msg
                     });
-                    this.state.categoryList.splice(this.state.categoryList.findIndex(item => Number(item.id) === Number(this.deleteCategoryId)), 1)
+                    this.set
                     this.props.history.push('/bk/category/list')
                 } else {
                     notification.open({
@@ -228,7 +227,6 @@ class Category extends Component {
                 confirmLoading: false
             })
         })
-
     }
 
     // table搜索功能

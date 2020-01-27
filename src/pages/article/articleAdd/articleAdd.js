@@ -8,6 +8,7 @@ import axios from "axios"
 import {withRouter} from "react-router-dom";
 import locale from "antd/es/date-picker/locale/zh_CN";
 import moment from "moment";
+import {loginInfo} from "../../../config";
 
 const {Option} = Select;
 
@@ -27,8 +28,10 @@ class ArticleAdd extends Component {
                 category: {},
                 date: ''
             },
-            loaded: false
+            loaded: false,
+            imageIds: []
         }
+        this.$vm = React.createRef()
     }
 
     componentDidMount() {
@@ -86,12 +89,6 @@ class ArticleAdd extends Component {
                 })
             })
         }
-    }
-
-    handleChange(value) {
-        this.setState({
-            value
-        })
     }
 
 
@@ -198,9 +195,37 @@ class ArticleAdd extends Component {
                         }
                     </div>
                     <MdEditor
+                        ref={this.$vm}
+                        toolbar={{
+                            h1: true, // h1
+                            h2: true, // h2
+                            h3: true, // h3
+                            h4: true, // h4
+                            img: true, // 图片
+                            link: false, // 链接
+                            code: true, // 代码块
+                            preview: true, // 预览
+                            expand: true, // 全屏
+                            undo: true, // 撤销
+                            redo: true, // 重做
+                            save: false, // 保存
+                            subfield: true, // 单双栏模式
+                        }}
                         style={{height: '500px'}}
                         value={this.state.value} placeholder=" "
-                        onChange={value => this.handleChange(value)}/>
+                        addImg={file => {
+                            // TODO 文件大小限制
+                            const reader = new FileReader()
+                            reader.readAsDataURL(file)
+                            reader.onload = () => {
+                                this.$vm.current.$img2Url(file.name, reader.result)
+                            }
+                        }}
+                        onChange={value => {
+                            this.setState({
+                                value
+                            })
+                        }}/>
                     <div id="saveButton">
                         <Button type="primary" onClick={() => this.saveArticle("0")}>保存为草稿</Button>
                         <Button type="primary" onClick={() => this.saveArticle("1")}>保存并发布</Button>

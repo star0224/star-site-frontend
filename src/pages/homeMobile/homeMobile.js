@@ -16,7 +16,8 @@ class HomeMobile extends Component {
                 }
             }],
             categories: [],
-            loaded: false
+            categoryLoaded: false,
+            articleLoaded: false
         }
     }
 
@@ -27,6 +28,7 @@ class HomeMobile extends Component {
                 if (res.status === 1) {
                     this.setState({
                         articles: res.data,
+                        articleLoaded: true
                     })
                 } else {
                     notification.open({
@@ -46,7 +48,7 @@ class HomeMobile extends Component {
                 if (res.status === 1) {
                     this.setState({
                         categories: res.data,
-                        loaded: true
+                        categoryLoaded: true
                     })
                 } else {
                     notification.open({
@@ -69,7 +71,7 @@ class HomeMobile extends Component {
                     <h1 style={{fontSize: '4em', marginBottom: '10px', marginLeft: '20px'}}>Star's First Land</h1>
                     <p style={{fontSize: '2em', color: 'rgb(198, 198, 198)', marginLeft: '20px'}}>这里将会向你分享一些技术文章</p>
                 </Row>
-                {!this.state.loaded ?
+                {!this.state.articleLoaded && !this.state.categoryLoaded ?
                     (<Row style={{height: '70vh'}} type="flex" justify="center" align="middle">
                         <Spin indicator={<Icon type="loading" style={{ fontSize: 40, position: 'relative', top: '-5px'}} spin />} />
                         <h2 style={{marginLeft: '30px', fontSize: '40px'}}>正在加载，请稍等~</h2>

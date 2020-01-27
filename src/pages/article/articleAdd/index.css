@@ -23,3 +23,7 @@
 #saveButton > button:first-child {
     margin-right: 30px;
 }
+
+.for-container .for-toolbar > ul > li.for-toolbar-img > ul{
+    list-style: none;
+}

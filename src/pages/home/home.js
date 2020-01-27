@@ -4,7 +4,7 @@ import './index.css'
 import axios from 'axios'
 import {BackTop, Button, Col, Divider, Drawer, Icon, List, notification, Popover, Row, Tooltip} from "antd";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
-import {NavLink} from "react-router-dom";
+import {NavLink, withRouter} from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
 
 class Home extends Component {
@@ -287,7 +287,7 @@ class Home extends Component {
                     <h2 id="blurBoxTitle">Star的初生之土 —— 纳沃利的普雷西典</h2>
                     <p>
                         <Button onClick={() => this.setState({visible: true})}>What's New</Button>
-                        <Button onClick={() => window.location.href = '/category/list'}>Reading</Button>
+                        <Button onClick={() => this.props.history.push('/category/list')}>Reading</Button>
                         <Popover content={contactContent} trigger="click" placement="right">
                             <Button type="primary">Contact Me</Button>
                         </Popover>
@@ -446,4 +446,4 @@ class Home extends Component {
     }
 }
 
-export default Home;
+export default withRouter(Home);

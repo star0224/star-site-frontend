@@ -80,7 +80,6 @@ class Version extends Component {
                         message: '请求成功',
                         description: '服务器返回信息： ' + res.msg
                     })
-                    window.location.reload()
                 } else {
                     notification.open({
                         message: '请求失败',
