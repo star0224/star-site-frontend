@@ -5,6 +5,7 @@ import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import ReactMarkdown from "react-markdown";
 import './index.css'
 import {NavLink} from "react-router-dom";
+import CodeBlock from "../../components/CodeBlock/CodeBlock";
 
 class ArticleMobile extends Component {
 
@@ -64,7 +65,9 @@ class ArticleMobile extends Component {
                     <Col span={3}>
                     </Col>
                     <Col span={18} style={{fontSize: '30px'}}>
-                        <ReactMarkdown source={this.state.article.content}/>
+                        <ReactMarkdown source={this.state.article.content} renderers={{
+                            code: CodeBlock
+                        }}/>
                     </Col>
                     <Col span={3}>
                     </Col>

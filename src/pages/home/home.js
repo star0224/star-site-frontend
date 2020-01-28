@@ -401,7 +401,7 @@ class Home extends Component {
                                                         <IconText type="calendar" text={item.date} key="calendar"/>
                                                         <IconText type="folder-open" text={item.category.name}
                                                                   key="category"/>
-                                                        <IconText type="message" text={2 + " Comments"} key="message"/>
+                                                        <IconText type="message" text={0 + " Comments"} key="message"/>
                                                         <IconText type="eye" text={item.views + " Views"} key="views"/>
                                                     </div>
                                                 )}

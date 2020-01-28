@@ -7,6 +7,7 @@ import ProgressBar from "../ProgressBar/ProgressBar";
 import {NavLink} from "react-router-dom";
 import $ from 'jquery'
 import Footer from "../Footer/Footer";
+import CodeBlock from "../CodeBlock/CodeBlock";
 
 const {Link} = Anchor;
 
@@ -38,10 +39,10 @@ class ArticleInfo extends Component {
                         anchor: anchor,
                         targetOffset: window.innerHeight / 6,
                     })
-                    $('h2').css('font-size', '28px')
-                    $('h3').css('font-size', '25px')
-                    $('h4').css('font-size', '22px')
-                    $('h5').css('font-size', '19px')
+                    // $('h2').css('font-size', '28px')
+                    // $('h3').css('font-size', '25px')
+                    // $('h4').css('font-size', '22px')
+                    // $('h5').css('font-size', '19px')
                     $('#articleInfo').children('div:first-child').children('div:first-child').children('div:nth-child(2)').width($('#articleInfo').children('div:first-child').children('div:first-child').width())
                 } else {
                     notification.open({
@@ -200,7 +201,9 @@ class ArticleInfo extends Component {
                             <div id="articleInfoTitle">{this.state.article.title}</div>
                             <div id="articleInfoDate">{this.state.article.date}</div>
                             <Divider/>
-                            <ReactMarkdown source={this.state.article.content}/>
+                            <ReactMarkdown source={this.state.article.content} renderers={{
+                                code: CodeBlock
+                            }}/>
                         </Col>
                         <Col span={2}></Col>
                         <Footer/>
