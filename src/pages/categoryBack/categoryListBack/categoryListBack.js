@@ -15,7 +15,7 @@ class CategoryListBack extends Component {
     render() {
         return (
             <div>
-                <NavigationBack selectedKeys="category_list" openKeys="category"/>
+                <NavigationBack selectedKeys="category_list" openKeys="article"/>
                 <div id="categoryListBack">
                     {
                         this.state.categoryId !== undefined ?

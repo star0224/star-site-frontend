@@ -25,6 +25,10 @@
     color: #666 !important;
 }
 
+#menu > li > div {
+    color: #666 !important;
+}
+
 .transparent #searchMenu > span > span > span {
     background-color: #fafafa00;
 }
@@ -47,6 +51,7 @@
     position: fixed;
     width: 100%;
     z-index: 900;
+    border: 1px solid #ffffff00;
 }
 
 #menu:hover {
@@ -86,6 +91,23 @@
 
 #searchMenu > span > span > span > button > i {
     margin: 0px;
+}
+
+.starSubMenu {
+    position: fixed;
+    transition: all 0.5s ease-in-out !important;
+    top: 58px !important;
+}
+
+.starSubMenu > ul > li:hover {
+    /*background-color: #3b6caa !important;*/
+    /*background-color: #40a9ff !important;*/
+    background-color: #1890ff !important;
+    /*background-color: #0068ff !important;*/
+}
+
+.starSubMenu > ul > li > a:hover {
+    color: white;
 }
 
 

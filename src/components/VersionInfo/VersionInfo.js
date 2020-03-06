@@ -33,7 +33,8 @@ class VersionInfo extends Component {
                     <Input addonBefore={"V"} defaultValue={this.state.version} disabled={this.state.modifiable}
                            style={{width: '6vw', marginBottom: '20px', marginRight: '20px'}}
                            placeholder={"版本"}/>
-                    <DatePicker locale={locale} disabled={this.state.modifiable} defaultValue={this.state.versionDate === "" ? "" : moment(this.state.versionDate, 'YYYY-MM-DD')} />
+                    <DatePicker locale={locale} disabled={this.state.modifiable}
+                                defaultValue={this.state.versionDate === "" ? "" : moment(this.state.versionDate, 'YYYY-MM-DD')}/>
                     {!this.state.modifiable ? (
                         <button className="versionInfoBtn"
                                 onClick={this.addVersionContent}>
@@ -57,13 +58,18 @@ class VersionInfo extends Component {
                         </button>) : ""}
 
                     {this.state.versionInfos.map((info, index, thisArr) => {
+                        console.log(info)
                         return (
                             <div>
-                                <Input className="versionInfo" defaultValue={info} allowClear placeholder="版本更新内容"
-                                       disabled={this.state.modifiable} onChange={value => {
-                                    thisArr[index] = value
-                                    this.setState({versionInfos: thisArr})
-                                }}/>
+                                <Input className="versionInfo" value={info} allowClear placeholder="版本更新内容"
+                                       disabled={this.state.modifiable}
+                                        onPressEnter={() => {
+                                            this.addVersionContent()
+                                        }}
+                                       onChange={e => {
+                                           thisArr[index] = e.target.value
+                                           this.setState({versionInfos: thisArr})
+                                       }}/>
                                 {!this.state.modifiable ? (
                                     <button style={{top: '0px'}} className="versionInfoBtn" onClick={() => {
                                         thisArr.splice(index, 1)

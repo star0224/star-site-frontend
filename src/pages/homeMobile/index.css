@@ -22,12 +22,12 @@
 #homeMobileCategories > div > div > div:first-child {
     font-size: 3em;
     padding: 40px;
-    border-radius: 10px 10px 0px 0px;
+    border-radius: 20px 20px 0px 0px;
 }
 
 #homeMobileCategories > div > div > div:nth-child(2) {
     padding: 20px 10px 0px 10px;
-    border-radius: 0px 0px 10px 10px;
+    border-radius: 0px 0px 20px 20px;
     border-bottom: none !important;
 }
 
@@ -85,4 +85,10 @@
     100% {
         transform: rotate(360deg);
     }
+}
+
+#homeMobile > div:first-child > div:first-child > svg:first-child {
+    width: 25px !important;
+    height: 25px !important;
+    margin-right: 5px;
 }

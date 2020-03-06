@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {BrowserRouter, Redirect, Route, Switch, useHistory, useLocation} from "react-router-dom";
-import {Button, Icon, Input, Modal, notification} from "antd";
+import {Button, Icon, Input, notification} from "antd";
 import './router.css'
 import {loginInfo} from "./config";
 import loadable from "./utils/loadable";
 import App from "./App";
+// import VocabularyListFront from "./pages/vocabularyListFront/vocabularyListFront";
 // import ArticleMobile from "./pages/articleMobile/articleMobile";
 // import Version from "./pages/version/version";
 // import CategoryList from "./pages/categoryList/categoryList";
@@ -18,6 +19,10 @@ import App from "./App";
 // import HomeMobile from "./pages/homeMobile/homeMobile";
 // import NoMatchMobile from "./pages/404Mobile/noMatchMobile";
 // import Navigation from "./components/Navigation/Navigation";
+// import Home from "./pages/home/home";
+// import VocabularyInfo from "./pages/vocabularyInfo/vocabularyInfo";
+// import VocabularyAdd from "./pages/vocabularyAdd/vocabularyAdd";
+// import VocabularyListBack from "./pages/vocabularyListBack/vocabularyListBack";
 
 const Home = loadable(() => import('./pages/home/home'))
 const CategoryList = loadable(() => import('./pages/categoryList/categoryList'))
@@ -33,7 +38,10 @@ const HomeMobile = loadable(() => import('./pages/homeMobile/homeMobile'))
 const NoMatchMobile = loadable(() => import('./pages/404Mobile/noMatchMobile'))
 const Version = loadable(() => import('./pages/version/version'))
 const ArticleMobile = loadable(() => import('./pages/articleMobile/articleMobile'))
-
+const VocabularyAdd = loadable(() => import('./pages/vocabularyAdd/vocabularyAdd'))
+const VocabularyListBack = loadable(() => import('./pages/vocabularyListBack/vocabularyListBack'))
+const VocabularyListFront = loadable(() => import('./pages/vocabularyListFront/vocabularyListFront'))
+const VocabularyInfo = loadable(() => import('./pages/vocabularyInfo/vocabularyInfo'))
 
 export default class Router extends Component {
 
@@ -72,6 +80,8 @@ export default class Router extends Component {
                             <Route path="/category/:id" component={CategoryList}/>
                             <Route path="/archive" component={Archive}/>
                             <Route path="/article/:id" component={ArticleInfo}/>
+                            <Route path="/vocabulary" component={VocabularyListFront}/>
+                            <Route path="/vocabularyInfo/:id" component={VocabularyInfo}/>
                             <PrivateRoute path="/bk">
                                 <Switch>
                                     <Route exact path="/bk" component={HomeBack}/>
@@ -81,6 +91,10 @@ export default class Router extends Component {
                                     <Route path="/bk/category/list" component={CategoryListBack}/>
                                     <Route path="/bk/category/:id" component={CategoryListBack}/>
                                     <Route path="/bk/version" component={Version}/>
+                                    <Route path="/bk/vocabulary/add/new" component={VocabularyAdd}/>
+                                    <Route path="/bk/vocabulary/add/:id" component={VocabularyAdd}/>
+                                    <Route path="/bk/vocabulary/list" component={VocabularyListBack}/>
+                                    <Route component={NoMatch}/>
                                 </Switch>
                             </PrivateRoute>
                             <Route component={NoMatch}/>
@@ -95,7 +109,7 @@ export default class Router extends Component {
                     <div>
                         <Switch>
                             <Route exact path="/" component={HomeMobile}/>
-                            <Route path="/mobile/article/:id" component={ArticleMobile}/>
+                            <Route path="/article/:id" component={ArticleMobile}/>
                             <Route component={NoMatchMobile}/>
                         </Switch>
                     </div>
@@ -118,9 +132,20 @@ function LoginPage() {
                     身份认证
                 </div>
 
-                <Input
+                <Input.Password
                     id="backToken"
                     placeholder="请输入Token"
+                    onPressEnter={() => {
+                        loginInfo.logIn(() => {
+                            if (document.getElementById('backToken').value === 'gx0224') {
+                                history.replace(from);
+                            } else {
+                                notification.open({
+                                    message: '请输入正确Token'
+                                })
+                            }
+                        })
+                    }}
                     prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}}/>}
                 />
 

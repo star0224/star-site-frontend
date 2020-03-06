@@ -9,7 +9,7 @@ class HomeBack extends Component {
             <div>
                 <NavigationBack selectedKeys="dashboard"/>
                 <div id="archiveBack">
-                    <StarStatistic />
+                    <StarStatistic isBack={true}/>
                 </div>
             </div>
         );

@@ -4,6 +4,7 @@ import "./index.css"
 import {NavLink} from "react-router-dom";
 
 const {Search} = Input;
+const {SubMenu} = Menu;
 
 class Navigation extends Component {
 
@@ -12,6 +13,7 @@ class Navigation extends Component {
         this.state = {
             current: props.current,
             showLogin: props.showLogin,
+            init: false
         }
     }
 
@@ -29,44 +31,46 @@ class Navigation extends Component {
     }
 
     componentDidMount() {
-        const menu = document.getElementById("menu")
-        const menuClasses = menu.classList
-        if (this.state.current === 'home') {
-            window.addEventListener('scroll', function () {
-                if (document.documentElement.scrollTop >= 1) {
-                    menuClasses.add("halfTransparent")
-                    menuClasses.remove("transparent")
-                } else {
-                    menuClasses.add("transparent")
-                    menuClasses.remove("halfTransparent")
-                }
-            }, false)
+        // const menu = document.getElementById('menu')
+        // const menuClasses = menu.classList
+        // if (this.state.current === 'home') {
+        //     window.addEventListener('scroll', function () {
+        //         if (document.documentElement.scrollTop >= 1) {
+        //             menuClasses.add("halfTransparent")
+        //             menuClasses.remove("transparent")
+        //         } else {
+        //             menuClasses.add("transparent")
+        //             menuClasses.remove("halfTransparent")
+        //         }
+        //     }, false)
+        //
+        //     menu.onmouseover = () => {
+        //         if (menuClasses.contains('transparent')) {
+        //             menuClasses.remove("transparent")
+        //         }
+        //         menuClasses.add("halfTransparent")
+        //     }
 
-            menu.onmouseover = () => {
-                if (menuClasses.contains('transparent')) {
-                    menuClasses.remove("transparent")
-                }
-                menuClasses.add("halfTransparent")
-            }
-            menu.onmouseleave = () => {
-                if (document.documentElement.scrollTop <= 1) {
-                    if (menuClasses.contains('halfTransparent')) {
-                        menuClasses.remove("halfTransparent")
-                    }
-                    menuClasses.add("transparent")
-                }
-            }
-        } else {
-            if (menuClasses.contains('transparent')) {
-                menuClasses.remove("transparent")
-            }
-            menuClasses.add("halfTransparent")
-        }
+            // menu.onmouseleave = () => {
+            //     if (document.documentElement.scrollTop <= 1) {
+            //         if (menuClasses.contains('halfTransparent')) {
+            //             menuClasses.remove("halfTransparent")
+            //         }
+            //         menuClasses.add("transparent")
+            //     }
+            // }
+
+        // } else {
+        //     if (menuClasses.contains('transparent')) {
+        //         menuClasses.remove("transparent")
+        //     }
+        //     menuClasses.add("halfTransparent")
+        // }
     }
 
     render() {
         return (
-            <Menu id="menu" className="transparent" onClick={this.handleClick} selectedKeys={[this.state.current]}
+            <Menu id="menu" className="halfTransparent" onClick={this.handleClick} selectedKeys={[this.state.current]}
                   mode="horizontal" style={{lineHeight: '55px'}}>
                 <Menu.Item id="logoItem" key="logo">
                     <NavLink to="/">
@@ -79,20 +83,27 @@ class Navigation extends Component {
                         首页
                     </NavLink>
                 </Menu.Item>
-                <Menu.Item key="category">
-                    <NavLink to="/category/list">
-                        分类
-                    </NavLink>
-                </Menu.Item>
+                <SubMenu popupClassName="starSubMenu" title="归档">
+                    <Menu.Item key="category">
+                        <NavLink to="/category/list">
+                            文章
+                        </NavLink>
+                    </Menu.Item>
+                    <Menu.Item key="vocabulary">
+                        <NavLink to="/vocabulary">
+                            词汇
+                        </NavLink>
+                    </Menu.Item>
+                </SubMenu>
                 <Menu.Item key="archive">
                     <NavLink to="/archive">
-                        归档
+                        统计
                     </NavLink>
                 </Menu.Item>
                 {!this.state.showLogin === true ? (
                     <Menu.Item key="bk">
                         <NavLink to="/bk">
-                            后台
+                            管理
                         </NavLink>
                     </Menu.Item>) : ''}
                 {this.state.showLogin === true ? (

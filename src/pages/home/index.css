@@ -51,6 +51,7 @@
     color: white;
     margin-top: 5px;
     margin-bottom: 15px;
+    font-weight: bold;
 }
 
 #content {
@@ -142,30 +143,70 @@
 
 #activities > li:first-child {
     text-align: left;
-    padding-left: 42px;
+    padding-left: 2vw;
     font-size: 10px;
 }
 
-#activities > li:first-child > div {
-    margin-right: 46px;
+#activities > li:first-child > div:first-child {
+    margin-right: 3.6vw;
+}
+
+#activities > li:first-child > div:nth-child(2) {
+    margin-right: 2.6vw;
+}
+
+#activities > li:first-child > div:nth-child(3) {
+    margin-right: 3.5vw;
+}
+
+#activities > li:first-child > div:nth-child(4) {
+    margin-right: 2.4vw;
+}
+
+#activities > li:first-child > div:nth-child(5) {
+    margin-right: 3vw;
+}
+
+#activities > li:first-child > div:nth-child(6) {
+    margin-right: 3vw;
+}
+
+#activities > li:first-child > div:nth-child(7) {
+    margin-right: 2.6vw;
+}
+
+#activities > li:first-child > div:nth-child(8) {
+    margin-right: 2.6vw;
+}
+
+#activities > li:first-child > div:nth-child(9) {
+    margin-right: 2.7vw;
+}
+
+#activities > li:first-child > div:nth-child(10) {
+    margin-right: 2.7vw;
+}
+
+#activities > li:first-child > div:nth-child(11) {
+    margin-right: 3.2vw;
 }
 
 .square {
     display: inline-block;
-    margin-right: 3px;
-    width: 12px;
-    height: 12px;
+    margin-right: 0.2vw;
+    width: 0.8vw;
+    height: 0.8vw;
     background-color: rgb(235, 237, 240);
 }
 
 .weekTitle {
     display: inline-block;
     display: inline-block;
-    width: 20px;
+    width: 1.5vw;
     font-size: 9px;
     fill: #767676;
-    margin-right: 5px;
-    height: 12px;
+    margin-right: 0.2vw;
+    height: 0.8vw;
 }
 
 #teamcity {
@@ -186,6 +227,49 @@
     top: 1.5px;
 }
 
+.gradientBlock {
+    position: absolute;
+    top: 100vh;
+    width: 100%;
+    height: 5vh;
+    background: linear-gradient(#ffffff, #f9f9f9);
+    z-index: 100;
+}
+
+.wave {
+    position: absolute;
+    height: 110px;
+    width: 100%;
+    overflow: hidden;
+    bottom: 0px;
+    z-index: 99;
+    transition: .4s ease all;
+}
+
+.wave #wave1, .wave #wave2 {
+    position: absolute;
+    width: 200%;
+    height: 100%;
+    background-size: 50% 100%;
+}
+
+.wave #wave1 {
+    top: 30px;
+    left: -100%;
+    opacity: 1;
+    animation: water-right 20s infinite linear;
+    background: url('../../assets/wave1.png') repeat-x;
+}
+
+.wave #wave2 {
+    top: 30px;
+    left: 0;
+    opacity: 1;
+    animation: water-left 30s infinite linear;
+    background: url('../../assets/wave1.png') repeat-x;
+}
+
+
 @keyframes rotate {
     0% {
         transform: rotate(0deg);
@@ -198,4 +282,54 @@
     }
 }
 
+@keyframes water-right {
+    0% {
+        transform: translateX(0) translateZ(0) scaleY(1);
+    }
+    50% {
+        transform: translateX(25%) translateZ(0) scaleY(0.85);
+    }
+    100% {
+        transform: translateX(50%) translateZ(0) scaleY(1);
+    }
+}
+
+@keyframes water-left {
+    0% {
+        transform: translate(0%, 0px);
+    }
+
+    100% {
+        transform: translate(-50%, 0px);
+    }
+}
+
+/*只有hover时才显示滚动条*/
+.starScroll > div:nth-child(2) > div ::-webkit-scrollbar {
+    display: none;
+}
+
+/*定义滚动条宽高及背景，宽高分别对应横竖滚动条的尺寸*/
+.starScroll > div:nth-child(2) > div > div:hover::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background-color: rgba(245, 245, 245, 0.47);
+    display: block;
+}
+
+/*定义滚动条的轨道，内阴影及圆角*/
+.starScroll > div:nth-child(2) > div > div:hover::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    border-radius: 10px;
+    background-color: #f5f5f5;
+}
+
+/*定义滑块，内阴影及圆角*/
+.starScroll > div:nth-child(2) > div > div:hover::-webkit-scrollbar-thumb {
+    /*width: 10px;*/
+    height: 20px;
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #87CEFA;
+}
 

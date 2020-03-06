@@ -2,10 +2,12 @@ import React, {Component} from 'react';
 import Navigation from "../../components/Navigation/Navigation";
 import './index.css'
 import axios from 'axios'
-import {BackTop, Button, Col, Divider, Drawer, Icon, List, notification, Popover, Row, Tooltip} from "antd";
+import {BackTop, Button, Col, Divider, Drawer, Icon, List, notification, Popover, Row, Spin, Tooltip} from "antd";
 import ProgressBar from "../../components/ProgressBar/ProgressBar";
 import {NavLink, withRouter} from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
+import $ from 'jquery'
+import {WordCloud} from "@antv/g2plot";
 
 class Home extends Component {
 
@@ -30,7 +32,7 @@ class Home extends Component {
 
     componentDidMount() {
         const _this = this
-        axios.get(global.constants.server + "/article/list/public?isPublic=1")
+        axios.get(global.constants.server + "/article/home")
             .then(res => {
                 res = JSON.parse(res.data)
                 if (res.status === 1) {
@@ -50,6 +52,61 @@ class Home extends Component {
                 description: '服务器无响应：' + e,
             });
         })
+        axios.get(global.constants.server + "/article/num")
+            .then(res => {
+                res = JSON.parse(res.data)
+                if (res.status === 1) {
+                    let categoryNum = []
+                    for (let i = 0; i < res.data.length; i++) {
+                        categoryNum.push({
+                            categoryName: res.data[i].categoryName,
+                            num: parseInt(res.data[i].articleNum)
+                        })
+                    }
+                    const wordCloudPlot = new WordCloud(document.getElementById('categoryCanvas'), this.getWordCloudConfig(categoryNum));
+                    wordCloudPlot.render();
+                } else {
+                    notification.open({
+                        message: '请求失败',
+                        description: '服务器返回信息： ' + res.msg
+                    })
+                }
+            }).catch(e => {
+            notification.open({
+                message: '组价加载失败',
+                description: '错误信息： ' + e
+            })
+            window.location.reload()
+        })
+
+        $.ajax({
+            type: "get",
+            dataType: 'jsonp',
+            data: {
+                key: global.constants.tencentKey,
+                output: 'jsonp'
+            },
+            jsonp: "callback",
+            url: 'https://apis.map.qq.com/ws/location/v1/ip',
+            success: function (data) {
+                const form = {
+                    ip: data.result.ip,
+                    country: data.result.ad_info.nation,
+                    province: data.result.ad_info.province,
+                    city: data.result.ad_info.city,
+                    district: data.result.ad_info.district,
+                    lat: data.result.location.lat,
+                    lng: data.result.location.lng
+                }
+                axios.post(global.constants.server + "/views/add", form).catch(e => {
+                    notification.open({
+                        message: '请求失败',
+                        description: '服务器无响应：' + e,
+                    });
+                })
+            },
+        });
+
         axios.get(global.constants.server + "/article/category/list")
             .then(res => {
                 res = JSON.parse(res.data)
@@ -218,6 +275,73 @@ class Home extends Component {
         }
     }
 
+    getDataList = (data) => {
+        const list = [];
+        // change data type
+        data.forEach((d) => {
+            list.push({
+                word: d.categoryName,
+                weight: d.num,
+                id: list.length,
+            });
+        });
+        return list;
+    }
+
+    getWordCloudConfig = (data) => {
+        return {
+            width: 300,
+            height: 200,
+            data: this.getDataList(data),
+            shape: 'square',
+            wordStyle: {
+                rotation: [-Math.PI / 2, Math.PI / 2],
+                rotateRatio: 0.5,
+                rotationSteps: 4,
+                fontSize: [20, 60],
+                color: (word, weight) => {
+                    return this.getRandomColor();
+                },
+                active: {
+                    shadowColor: '#333333',
+                    shadowBlur: 10,
+                },
+                gridSize: 38,
+            },
+            // shape: 'cardioid',
+            shuffle: false,
+            backgroundColor: '#fff',
+            tooltip: {
+                visible: true,
+            },
+            selected: -1,
+
+            onWordCloudHover: this.hoverAction(),
+
+        };
+    }
+
+    getRandomColor = () => {
+        const arr = [
+            '#5B8FF9',
+            '#5AD8A6',
+            '#5D7092',
+            '#F6BD16',
+            '#E8684A',
+            '#6DC8EC',
+            '#9270CA',
+            '#FF9D4D',
+            '#269A99',
+            '#FF99C3',
+        ];
+        return arr[Math.floor(Math.random() * (arr.length - 1))];
+    }
+
+    hoverAction = (item, dimension, evt, start) => {
+        // console.log('hover action', item && item.word);
+    }
+
+
     render() {
 
         const contactContent = (
@@ -250,25 +374,27 @@ class Home extends Component {
         return (
             <div>
                 <Drawer
+                    getContainer='body'
                     width={350}
                     title={"Star's First Land V" + this.state.versionInfos[0].version}
                     placement="right"
+                    className='starScroll'
                     closable={false}
                     onClose={() => this.setState({visible: false})}
                     visible={this.state.visible}
                 >
                     <div>
-                        {this.state.versionInfos.map(versionInfo => {
+                        {this.state.versionInfos.map((versionInfo, index) => {
                             return (
-                                <div>
+                                <div key={index}>
                                     <h3 style={{display: 'inline'}}>{"V" + versionInfo.version}</h3>
                                     <span style={{marginLeft: '20px'}}>
                                         {versionInfo.date}
                                     </span>
                                     <Divider style={{margin: '10px 0px 10px 0px'}}/>
                                     <ul style={{listStyle: 'none', paddingLeft: '5px', marginBottom: '50px'}}>
-                                        {versionInfo.contents.map(content => {
-                                            return <li style={{marginBottom: '5px'}}>{content}</li>
+                                        {versionInfo.contents.map((content, index) => {
+                                            return <li key={index} style={{marginBottom: '5px'}}>{content}</li>
                                         })}
                                     </ul>
                                 </div>
@@ -284,7 +410,7 @@ class Home extends Component {
                 <div id="blurBox">
                     <p className="enHomeTitle">Star's</p>
                     <p className="enHomeTitle">The First Lands —— The Placidium of Navori</p>
-                    <h2 id="blurBoxTitle">Star的初生之土 —— 纳沃利的普雷西典</h2>
+                    <h2 id="blurBoxTitle" className='glitch'>Star的初生之土 —— 纳沃利的普雷西典</h2>
                     <p>
                         <Button onClick={() => this.setState({visible: true})}>What's New</Button>
                         <Button onClick={() => this.props.history.push('/category/list')}>Reading</Button>
@@ -293,10 +419,29 @@ class Home extends Component {
                         </Popover>
                     </p>
                 </div>
+                <div className='wave'>
+                    <div id='wave1'/>
+                    <div id='wave2'/>
+                </div>
+                <div className='gradientBlock'></div>
                 {!this.state.loaded ? (
-                    <div style={{height: '100vh', position: 'absolute', top: '100vh', width: '100vw', backgroundColor: '#f6f6f6'}} >
+                    <div style={{
+                        height: '100vh',
+                        position: 'absolute',
+                        top: '100vh',
+                        width: '100vw',
+                        backgroundColor: '#f6f6f6'
+                    }}>
                         <Row style={{height: '100vh'}} type="flex" justify="center" align="middle">
-                            <span style={{top: '-4px'}} id='teamcity'></span>
+                            <Spin
+                                indicator={<Icon type="loading"
+                                                 style={{
+                                                     fontSize: 24,
+                                                     position: 'relative',
+                                                     top: '-2px',
+                                                     marginRight: '10px'
+                                                 }}
+                                                 spin/>}/>
                             <h2 style={{marginLeft: '10px'}}>正在加载，请稍等~</h2>
                         </Row>
                     </div>
@@ -399,14 +544,16 @@ class Home extends Component {
                                                 description={(
                                                     <div id="archivesDesc">
                                                         <IconText type="calendar" text={item.date} key="calendar"/>
-                                                        <IconText type="folder-open" text={item.category.name}
+                                                        <IconText type="folder-open" text={item.categoryName}
                                                                   key="category"/>
-                                                        <IconText type="message" text={0 + " Comments"} key="message"/>
+                                                        {/*<IconText type="message" text={0 + " Comments"} key="message"/>*/}
                                                         <IconText type="eye" text={item.views + " Views"} key="views"/>
+                                                        <IconText type="highlight" text={item.wordCount + " 字"}
+                                                                  key="wordCount"/>
                                                     </div>
                                                 )}
                                             />
-                                            {item.content}
+                                            {item.description}
                                         </List.Item>
                                     )}
                                 />
@@ -414,6 +561,15 @@ class Home extends Component {
                         </Col>
                         <Col span={2}></Col>
                         <Col span={6}>
+                            <div id="essays">
+                                <h3>
+                                    <Icon type="unordered-list"/>
+                                    Statistic
+                                </h3>
+                                <Divider dashed/>
+                                <div id='categoryCanvas' style={{marginTop: '20px'}}></div>
+                            </div>
+
                             <div id="essays">
                                 <h3>
                                     <Icon type="unordered-list"/>

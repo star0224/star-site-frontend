@@ -1,15 +1,17 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
 import {PrismLight as SyntaxHighlighter} from "react-syntax-highlighter";
+import {hopscotch} from "react-syntax-highlighter/dist/cjs/styles/prism";
 import {
-    duotoneEarth,
-    duotoneLight,
-    ghcolors,
-    hopscotch, okaidia,
-    prism,
-    twilight
-} from "react-syntax-highlighter/dist/cjs/styles/prism";
-import {jsx, java, javascript, kotlin, powershell, sql, typescript, yaml} from "react-syntax-highlighter/dist/cjs/languages/prism";
+    java,
+    javascript,
+    jsx,
+    kotlin,
+    powershell,
+    sql,
+    typescript,
+    yaml
+} from "react-syntax-highlighter/dist/cjs/languages/prism";
 
 class CodeBlock extends Component {
     static propType = {

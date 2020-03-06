@@ -21,7 +21,7 @@ class CategoryAddBack extends Component {
 
         return (
             <div>
-                <NavigationBack selectedKeys="category_add" openKeys="category"/>
+                <NavigationBack selectedKeys="category_add" openKeys="article"/>
                 <div id="categoryAdd">
                     <div>新增分类：</div>
                     <Input onChange={(e) => {

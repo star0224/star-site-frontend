@@ -99,10 +99,12 @@ class Version extends Component {
         return (
             <div>
                 <ProgressBar/>
-                <NavigationBack selectedKeys="version_detail" openKeys="version"/>
+                <NavigationBack selectedKeys="version"/>
                 <div id="version">
                     <div>
-                        <Icon style={{marginLeft: '20px', fontSize: '25px'}} type="branches"/>
+                        <Icon style={{
+                            marginLeft: '20px', fontSize: '20px', top: '-2px', position: 'relative'
+                        }} type="branches"/>
                         <h1 style={{display: 'inline-block', marginRight: '50px', marginLeft: '10px'}}>版本信息</h1>
                         {this.state.isPlus ?
                             <Button id="newVersionInfoBtn" style={{

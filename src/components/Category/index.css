@@ -27,31 +27,10 @@
     background-color: #87CEFA;
 }
 
-#teamcity {
-    content: none;
-    -webkit-mask-image: radial-gradient(8px, transparent 71.875%, white 78.125%);
-    mask: radial-gradient(8px, transparent 71.875%, white 78.125%);
-    background-image: conic-gradient(#ff00eb, #bd3bff, #008eff, #58ba00, #f48700, #ff00eb);
-    display: inline-block;
-    margin-right: 5px;
-    width: 16px;
-    height: 16px;
-    content: '';
-    animation: rotate 0.75s linear infinite;
-    transform-origin: 50% 50%;
-    border-radius: 10px;
-    position: relative;
-    top: 1.5px;
+.ant-table-header-column {
+    font-weight: bold;
 }
 
-@keyframes rotate {
-    0% {
-        transform: rotate(0deg);
-    }
-    50% {
-        transform: rotate(180deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
+#categoryMenu > li:first-child {
+    font-weight: bold;
 }

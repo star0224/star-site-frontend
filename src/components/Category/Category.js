@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import {Button, Col, Divider, Icon, Input, Menu, Modal, notification, Row, Table} from "antd";
+import {Button, Col, Divider, Icon, Input, Menu, Modal, notification, Row, Spin, Table} from "antd";
 import axios from 'axios'
 import {NavLink, withRouter} from "react-router-dom";
 import Highlighter from 'react-highlight-words';
 import './index.css'
 import $ from 'jquery'
 import Footer from "../Footer/Footer";
-import {loginInfo} from "../../config";
 
 
 class Category extends Component {
@@ -40,6 +39,7 @@ class Category extends Component {
         axios.get(global.constants.server + "/article/category/list")
             .then((res) => {
                 res = JSON.parse(res.data)
+
                 if (res.status === 1) {
                     _this.setState({
                         categoryList: res.data,
@@ -58,7 +58,7 @@ class Category extends Component {
             });
         })
         if (this.state.categorySelectedKeys !== "all_category") {
-            let target = "/article/category/?categoryId=" + this.state.categorySelectedKeys + "&isPublic=1"
+            let target = "/article/category/public/?categoryId=" + this.state.categorySelectedKeys + "&isPublic=1"
             if (this.state.isBackStage) {
                 target = "/article/category/?categoryId=" + this.state.categorySelectedKeys
             }
@@ -136,12 +136,16 @@ class Category extends Component {
                 if (this.state.isBackStage) {
                     target = "/article/list"
                 }
+                this.setState({
+                    articleLoaded: false
+                })
                 axios.get(global.constants.server + target)
                     .then((res) => {
                         res = JSON.parse(res.data)
                         if (res.status === 1) {
                             _this.setState({
-                                articleList: res.data
+                                articleList: res.data,
+                                articleLoaded: true
                             })
                         } else {
                             notification.open({
@@ -158,9 +162,10 @@ class Category extends Component {
                 break
             default:
                 _this.setState({
-                    categorySelectedKeys: e.key
+                    categorySelectedKeys: e.key,
+                    articleLoaded: false
                 })
-                let targetUrl = "/article/category/?categoryId=" + e.key + "&isPublic=1"
+                let targetUrl = "/article/category/public/?categoryId=" + e.key + "&isPublic=1"
                 if (this.state.isBackStage) {
                     targetUrl = "/article/category/?categoryId=" + e.key
                 }
@@ -169,7 +174,8 @@ class Category extends Component {
                         res = JSON.parse(res.data)
                         if (res.status === 1) {
                             _this.setState({
-                                articleList: res.data
+                                articleList: res.data,
+                                articleLoaded: true
                             })
                         } else {
                             notification.open({
@@ -323,14 +329,14 @@ class Category extends Component {
                 title: title,
                 dataIndex: 'title',
                 key: 'title',
-                width: '50%',
+                width: '40%',
                 ...this.getColumnSearchProps('title'),
                 render: (text, record) => <NavLink to={"/article/" + record.id}>{text}</NavLink>
             }, {
                 title: '日期',
                 dataIndex: 'date',
                 align: 'center',
-                width: '25%',
+                width: '20%',
                 key: 'date',
                 render: text => <IconText type="calendar" text={text} key="calendar"/>
 
@@ -338,9 +344,16 @@ class Category extends Component {
                 title: '访问量',
                 dataIndex: 'views',
                 key: 'views',
-                width: '25%',
+                width: '20%',
                 align: 'center',
                 render: text => <IconText type="eye" text={text + " Views"} key="views"/>
+            }, {
+                title: '字数',
+                dataIndex: 'wordCount',
+                key: 'wordCount',
+                width: '20%',
+                align: 'center',
+                render: text => <IconText type="highlight" text={text + "字"} key="wordCount"/>
             }
         ];
         const backColumns = [
@@ -348,11 +361,11 @@ class Category extends Component {
                 title: title,
                 dataIndex: 'title',
                 key: 'title',
-                width: '45%',
+                width: '40%',
                 ...this.getColumnSearchProps('title'),
                 render: (text, record) => <NavLink to={"/bk/article/add/" + record.id}>{text}</NavLink>
             }, {
-                title: 'Date',
+                title: '日期',
                 dataIndex: 'date',
                 align: 'center',
                 width: '15%',
@@ -360,14 +373,21 @@ class Category extends Component {
                 render: text => <IconText type="calendar" text={text} key="calendar"/>
 
             }, {
-                title: 'Views',
+                title: '访问量',
                 dataIndex: 'views',
                 key: 'views',
                 width: '15%',
                 align: 'center',
                 render: text => <IconText type="eye" text={text + " Views"} key="views"/>
             }, {
-                title: 'Action',
+                title: '字数',
+                dataIndex: 'wordCount',
+                key: 'wordCount',
+                width: '15%',
+                align: 'center',
+                render: text => <IconText type="highlight" text={text + "字"} key="wordCount"/>
+            }, {
+                title: '操作',
                 dataIndex: 'action',
                 key: 'action',
                 width: '15%',
@@ -451,7 +471,7 @@ class Category extends Component {
         ];
 
         return (
-            <Row type="flex" align="center" justify="center">
+            <Row type="flex" justify="center">
                 <Modal
                     title="Warning"
                     visible={this.state.visible}
@@ -559,14 +579,17 @@ class Category extends Component {
                     {!this.state.articleLoaded ?
                         <div>
                             <Row style={{height: '80vh'}} type="flex" justify="center" align="middle">
-                                <span style={{top: '-4px'}} id='teamcity'></span>
+                                <Spin
+                                    indicator={<Icon type="loading"
+                                                     style={{fontSize: 24, position: 'relative', top: '-2px', marginRight: '10px'}}
+                                                     spin/>}/>
                                 <h2 style={{marginLeft: '10px'}}>正在加载，请稍等~</h2>
                             </Row>
                         </div>
                         : <Table columns={this.state.isBackStage ? backColumns : columns}
                                  dataSource={this.state.articleList}/>}
                 </Col>
-                {this.state.isBackStage ? "" : <Footer/>}
+                {/*{this.state.isBackStage ? "" : <Footer/>}*/}
             </Row>
         );
     }

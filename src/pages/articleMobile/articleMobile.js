@@ -6,6 +6,8 @@ import ReactMarkdown from "react-markdown";
 import './index.css'
 import {NavLink} from "react-router-dom";
 import CodeBlock from "../../components/CodeBlock/CodeBlock";
+import $ from "jquery";
+import loadingURL from "../../assets/loading.svg";
 
 class ArticleMobile extends Component {
 
@@ -27,6 +29,45 @@ class ArticleMobile extends Component {
                         article: res.data,
                         loaded: true
                     })
+                    $('h1').addClass('mobileArticleH1')
+                    $('h2').addClass('mobileArticleH2')
+                    $('h3').addClass('mobileArticleH3')
+                    $('h4').addClass('mobileArticleH4')
+                    $('h5').addClass('mobileArticleH5')
+                    $('td').addClass('mobileArticleT')
+                    $('th').addClass('mobileArticleT')
+                    $('table').addClass('mobileArticleT')
+                    $('img').attr('src', loadingURL)
+                    $('img').addClass('autoFlip')
+                    $('img').css('max-width', '80vw')
+                    // 获取图片
+                    axios.get(global.constants.server + "/article/images?articleId=" + this.state.id)
+                        .then(res => {
+                            res = JSON.parse(res.data)
+                            if (res.status === 1) {
+                                const images = res.data
+                                $('img').removeClass('autoFlip')
+                                if (images !== null && images.length > 0) {
+                                    let article = this.state.article;
+                                    const placeholder = article.content.match(/!\[.*?\]\(data:image.*?\)/g)
+                                    if (placeholder !== null) {
+                                        for (let i = 0; i < placeholder.length; i++) {
+                                            article.content = this.state.article.content.replace(placeholder[i], images[i].image)
+                                            this.setState({
+                                                article
+                                            })
+                                        }
+                                    }
+                                }
+                                // 增加文章浏览量
+                                axios.get(global.constants.server + "/article/views/add?id=" + this.state.id)
+                            } else {
+                                notification.open({
+                                    message: '请求失败',
+                                    description: '服务器返回信息： ' + res.msg
+                                })
+                            }
+                        })
                 } else {
                     notification.open({
                         message: '请求失败',
@@ -47,11 +88,21 @@ class ArticleMobile extends Component {
                 <ProgressBar/>
                 <Row type="flex" justify="center" align="center">
                     <Col span={21}>
-                        <NavLink to="/">
-                            <Icon type="home" style={{fontSize: '40px', marginLeft: '30px', color: '#404040'}}/>
-                        </NavLink>
-                        <span id="mobileTitleDivider"/>
-                        <div id="mobileArticleTitle">{this.state.article.title}</div>
+                        <Row type="flex" justify="center" align="middle">
+                            <Col span={2}>
+                                <NavLink to="/">
+                                    <Icon type="home" style={{fontSize: '40px', marginLeft: '30px', color: '#404040'}}/>
+                                </NavLink>
+                            </Col>
+                            <Col span={1}></Col>
+                            <Col span={2}>
+                                <span id="mobileTitleDivider"/>
+                            </Col>
+                            <Col span={2}></Col>
+                            <Col span={16}>
+                                <div id="mobileArticleTitle">{this.state.article.title}</div>
+                            </Col>
+                        </Row>
                     </Col>
                     <Col span={3}>
                         {!this.state.loaded ? <Spin
@@ -62,14 +113,14 @@ class ArticleMobile extends Component {
                 </Row>
                 <Divider/>
                 <Row>
-                    <Col span={3}>
+                    <Col span={1}>
                     </Col>
-                    <Col span={18} style={{fontSize: '30px'}}>
+                    <Col span={22} style={{fontSize: '30px'}}>
                         <ReactMarkdown source={this.state.article.content} renderers={{
                             code: CodeBlock
                         }}/>
                     </Col>
-                    <Col span={3}>
+                    <Col span={1}>
                     </Col>
                 </Row>
             </div>

@@ -15,14 +15,9 @@ class NavigationBack extends Component {
         }
     }
 
-    handleClick = e => {
-
-    };
-
     render() {
         return (
             <Menu id="navigation_bk"
-                  onClick={this.handleClick}
                   style={{width: '15vw'}}
                   defaultSelectedKeys={[this.state.selectedKeys]}
                   defaultOpenKeys={[this.state.openKeys]}
@@ -36,19 +31,25 @@ class NavigationBack extends Component {
                     <NavLink to="/bk">
                         <span>
                             <Icon type="dashboard"/>
-                            <span>仪表板</span>
+                            <span>统计</span>
                         </span>
+                    </NavLink>
+                </Menu.Item>
+                <Menu.Item key="version">
+                    <NavLink to="/bk/version">
+                        <Icon type="branches"/>
+                        版本
                     </NavLink>
                 </Menu.Item>
                 <SubMenu key="article" title={
                     <span>
-                        <Icon type="file-text"/>
+                        <Icon type="read"/>
                         <span>文章</span>
                     </span>
                 }>
                     {
                         this.state.selectedKeys !== 'article_update' ?
-                            <Menu.Item key="article_add" title="Add 增加">
+                            <Menu.Item key="article_add">
                                 <NavLink to="/bk/article/add/new">
                                     Article Add 增加
                                 </NavLink>
@@ -60,33 +61,43 @@ class NavigationBack extends Component {
                                 Article Update 修改
                             </Menu.Item> : ""
                     }
-                </SubMenu>
-                <SubMenu key="category" title={
-                    <span>
-                        <Icon type="folder-open"/>
-                        <span>分类</span>
-                    </span>
-                }>
-                    <Menu.Item key="category_list">
-                        <NavLink to="/bk/category/list">
-                            Category List 列表
-                        </NavLink>
-                    </Menu.Item>
-                    <Menu.Item key="category_add" title="Add 增加">
+                    <Menu.Item key="category_add">
                         <NavLink to="/bk/category/add">
                             Category Add 增加
                         </NavLink>
                     </Menu.Item>
+                    <Menu.Item key="category_list">
+                        <NavLink to="/bk/category/list">
+                            Article List 列表
+                        </NavLink>
+                    </Menu.Item>
                 </SubMenu>
-                <SubMenu key="version" title={
+                <SubMenu key="vocabulary" title={
                     <span>
-                        <Icon type="ordered-list"/>
-                        <span>版本</span>
+                        <Icon type="sort-ascending"/>
+                        <span>词汇</span>
                     </span>
                 }>
-                    <Menu.Item key="version_detail" title="Version Info 版本信息">
-                        <NavLink to="/bk/version">
-                            Version Info 版本信息
+                    {
+                        this.state.selectedKeys !== 'vocabulary_update' ?
+                            <Menu.Item key="vocabulary_add">
+                                <NavLink to="/bk/vocabulary/add/new">
+                                    Vocabulary Add 增加
+                                </NavLink>
+                            </Menu.Item> : ""
+                    }
+                    {
+                        this.state.selectedKeys === 'vocabulary_update' ?
+                            <Menu.Item key="vocabulary_update">
+                                <NavLink to="/bk/vocabulary/add/new">
+                                    Vocabulary Update 修改
+                                </NavLink>
+                            </Menu.Item> : ""
+                    }
+
+                    <Menu.Item key="vocabulary_list">
+                        <NavLink to="/bk/vocabulary/list">
+                            Vocabulary List 列表
                         </NavLink>
                     </Menu.Item>
                 </SubMenu>

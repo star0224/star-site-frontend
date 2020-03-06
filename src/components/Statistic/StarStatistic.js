@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {Card, Col, Icon, notification, Row} from "antd";
 import './index.css'
-import {Area} from '@antv/g2plot';
+import {Area, Column} from '@antv/g2plot';
 import axios from 'axios'
+import {withRouter} from "react-router-dom";
 
 class StarStatistic extends Component {
 
@@ -10,15 +11,11 @@ class StarStatistic extends Component {
         super(props);
         this.state = {
             articleTotal: '...',
-            articleDay: '...',
-            articleWeek: '...',
-            articleMonth: '...',
-            categoryNum: [
-                {
-                    categoryName: '',
-                    articleNum: ''
-                }
-            ],
+            vocabularyTotal: '...',
+            bugTotal: '0',
+            viewTotal: '...',
+            isBack: props.isBack,
+            categoryNum: [],
         }
     }
 
@@ -28,10 +25,47 @@ class StarStatistic extends Component {
                 res = JSON.parse(res.data)
                 if (res.status === 1) {
                     this.setState({
-                        articleTotal: res.data.articleTotal,
-                        articleDay: res.data.articleDay,
-                        articleWeek: res.data.articleWeek,
-                        articleMonth: res.data.articleMonth,
+                        articleTotal: res.data,
+                    })
+                } else {
+                    notification.open({
+                        message: '请求失败',
+                        description: '服务器返回信息： ' + res.msg
+                    })
+                }
+            }).catch(e => {
+            notification.open({
+                message: '请求失败',
+                description: '服务器无响应：' + e,
+            });
+        })
+
+        axios.get(global.constants.server + "/vocabulary/all/num")
+            .then(res => {
+                res = JSON.parse(res.data)
+                if (res.status === 1) {
+                    this.setState({
+                        vocabularyTotal: res.data,
+                    })
+                } else {
+                    notification.open({
+                        message: '请求失败',
+                        description: '服务器返回信息： ' + res.msg
+                    })
+                }
+            }).catch(e => {
+            notification.open({
+                message: '请求失败',
+                description: '服务器无响应：' + e,
+            });
+        })
+
+        axios.get(global.constants.server + "/views/all/num")
+            .then(res => {
+                res = JSON.parse(res.data)
+                if (res.status === 1) {
+                    this.setState({
+                        viewTotal: res.data,
                     })
                 } else {
                     notification.open({
@@ -50,23 +84,42 @@ class StarStatistic extends Component {
             .then(res => {
                 res = JSON.parse(res.data)
                 if (res.status === 1) {
+                    let categoryNum = this.state.categoryNum
+                    for (let i = 0; i < res.data.length; i++) {
+                        categoryNum.push({
+                            categoryName: res.data[i].categoryName,
+                            num: parseInt(res.data[i].articleNum)
+                        })
+                    }
                     this.setState({
-                        categoryNum: res.data
+                        categoryNum
                     })
                     const data = this.state.categoryNum
-                    const categoryPlot = new Area('categoryCanvas', {
-                        title: {
-                            visible: true,
-                            text: '分类分布图',
-                        },
+                    const categoryPlot = new Column('categoryCanvas', {
                         data,
                         xField: 'categoryName',
-                        yField: 'articleNum',
+                        yField: 'num',
+                        meta: {
+                            num: {
+                                alias: '数量',
+                            },
+                            categoryName: {
+                                alias: '类别'
+                            }
+                        },
                         legend: {
                             visible: true,
                             position: 'top',
                         },
-                        areaStyle: {}
+                        point: {
+                            visible: true,
+
+                        },
+                        yAxis: {
+                            grid: {
+                                visible: true,
+                            },
+                        },
                     });
                     categoryPlot.render();
                 } else {
@@ -81,13 +134,21 @@ class StarStatistic extends Component {
 
     }
 
+
     render() {
 
         return (
             <div>
-                <Row type="flex" justify="center" gutter={32} style={{marginTop: '60px'}}>
+                <Row type="flex" justify="center" gutter={32} style={{marginTop: '50px'}}>
                     <Col span={5}>
                         <Card style={{background: 'linear-gradient(to right, rgb(71, 118, 230), rgb(142, 84, 233))'}}
+                              onClick={() => {
+                                  if (this.state.isBack !== true) {
+                                      this.props.history.push('/category/list');
+                                  } else {
+                                      this.props.history.push('/bk/category/list');
+                                  }
+                              }}
                               className="statisticCard" hoverable bordered={false}>
                             <Row>
                                 <Col span={21}>
@@ -97,21 +158,31 @@ class StarStatistic extends Component {
                                     <Icon style={{fontSize: '25px'}} type="rocket"/>
                                 </Col>
                             </Row>
-                            <p>总计 total</p>
+                            <p>文章 Article</p>
                         </Card>
                     </Col>
                     <Col span={5}>
                         <Card style={{background: 'linear-gradient(to right,rgb(213, 51, 105), rgb(203, 173, 109))'}}
+                              onClick={() => {
+                                  if (this.state.isBack !== true) {
+                                      this.props.history.push('/vocabulary');
+                                  } else {
+                                      this.props.history.push('/bk/vocabulary/list');
+                                  }
+                              }}
                               className="statisticCard" hoverable bordered={false}>
                             <Row>
                                 <Col span={21}>
-                                    <h1 style={{color: '#fff', display: 'inline'}}>{this.state.articleDay + " "}</h1>篇
+                                    <h1 style={{
+                                        color: '#fff',
+                                        display: 'inline'
+                                    }}>{this.state.vocabularyTotal + " "}</h1>个
                                 </Col>
                                 <Col span={3}>
                                     <Icon style={{fontSize: '25px'}} type="bulb"/>
                                 </Col>
                             </Row>
-                            <p>今日 today</p>
+                            <p>词汇 Vocabulary</p>
                         </Card>
                     </Col>
                     <Col span={5}>
@@ -119,13 +190,13 @@ class StarStatistic extends Component {
                               className="statisticCard" hoverable bordered={false}>
                             <Row>
                                 <Col span={21}>
-                                    <h1 style={{color: '#fff', display: 'inline'}}>{this.state.articleWeek + " "}</h1>篇
+                                    <h1 style={{color: '#fff', display: 'inline'}}>{this.state.bugTotal + " "}</h1>例
                                 </Col>
                                 <Col span={3}>
                                     <Icon style={{fontSize: '25px'}} type="crown"/>
                                 </Col>
                             </Row>
-                            <p>本周 week</p>
+                            <p>漏洞 Bug</p>
                         </Card>
                     </Col>
                     <Col span={5}>
@@ -134,17 +205,17 @@ class StarStatistic extends Component {
                             className="statisticCard" hoverable bordered={false}>
                             <Row>
                                 <Col span={21}>
-                                    <h1 style={{color: '#fff', display: 'inline'}}>{this.state.articleMonth + " "}</h1>篇
+                                    <h1 style={{color: '#fff', display: 'inline'}}>{this.state.viewTotal + " "}</h1>次
                                 </Col>
                                 <Col span={3}>
                                     <Icon style={{fontSize: '25px'}} type="star"/>
                                 </Col>
                             </Row>
-                            <p>本月 month</p>
+                            <p>访问 View</p>
                         </Card>
                     </Col>
                 </Row>
-                <Row type="flex" justify="center" style={{marginTop: '80px'}}>
+                <Row type="flex" justify="center" style={{marginTop: '60px'}}>
                     <Col span={20} style={{backgroundColor: '#fff', borderRadius: '10px'}}>
                         <div id="categoryCanvas"></div>
                     </Col>
@@ -154,4 +225,4 @@ class StarStatistic extends Component {
     }
 }
 
-export default StarStatistic;
+export default withRouter(StarStatistic);

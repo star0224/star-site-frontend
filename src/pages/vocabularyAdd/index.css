@@ -1,0 +1,9 @@
+#vocabularyAdd {
+    float: right;
+    width: 85vw;
+    padding: 30px;
+}
+
+#vocabularyTranslateBtn:hover {
+    cursor: pointer;
+}
