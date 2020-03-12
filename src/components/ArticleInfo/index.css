@@ -105,3 +105,24 @@
     border: 1px solid #000;
     padding: 10px;
 }
+
+.articleBlockQuote {
+    margin: 0;
+    margin-bottom: 0.6em;
+    padding: 0 1em;
+    color: #6a737d;
+    border-left: 0.25em solid #dfe2e5;
+}
+
+.articleCode {
+    padding: 0 2px;
+    margin: 3px;
+    color: #000;
+    border-radius: 3px;
+    background-color: #dcdcdc;
+    font-family: var(--monospace);
+}
+
+.articlePre {
+    border-radius: 10px;
+}

@@ -52,32 +52,7 @@ class Home extends Component {
                 description: '服务器无响应：' + e,
             });
         })
-        axios.get(global.constants.server + "/article/num")
-            .then(res => {
-                res = JSON.parse(res.data)
-                if (res.status === 1) {
-                    let categoryNum = []
-                    for (let i = 0; i < res.data.length; i++) {
-                        categoryNum.push({
-                            categoryName: res.data[i].categoryName,
-                            num: parseInt(res.data[i].articleNum)
-                        })
-                    }
-                    const wordCloudPlot = new WordCloud(document.getElementById('categoryCanvas'), this.getWordCloudConfig(categoryNum));
-                    wordCloudPlot.render();
-                } else {
-                    notification.open({
-                        message: '请求失败',
-                        description: '服务器返回信息： ' + res.msg
-                    })
-                }
-            }).catch(e => {
-            notification.open({
-                message: '组价加载失败',
-                description: '错误信息： ' + e
-            })
-            window.location.reload()
-        })
+        this.generateWordCloud()
 
         $.ajax({
             type: "get",
@@ -144,6 +119,31 @@ class Home extends Component {
                 message: '请求失败',
                 description: '服务器无响应：' + e,
             });
+        })
+    }
+
+    generateWordCloud = () => {
+        axios.get(global.constants.server + "/article/num")
+            .then(res => {
+                res = JSON.parse(res.data)
+                if (res.status === 1) {
+                    let categoryNum = []
+                    for (let i = 0; i < res.data.length; i++) {
+                        categoryNum.push({
+                            categoryName: res.data[i].categoryName,
+                            num: parseInt(res.data[i].articleNum)
+                        })
+                    }
+                    const wordCloudPlot = new WordCloud(document.getElementById('categoryCanvas'), this.getWordCloudConfig(categoryNum));
+                    wordCloudPlot.render()
+                } else {
+                    notification.open({
+                        message: '请求失败',
+                        description: '服务器返回信息： ' + res.msg
+                    })
+                }
+            }).catch(e => {
+            this.generateWordCloud()
         })
     }
 
@@ -291,14 +291,14 @@ class Home extends Component {
     getWordCloudConfig = (data) => {
         return {
             width: 300,
-            height: 200,
+            height: 250,
             data: this.getDataList(data),
-            shape: 'square',
+            shape: 'circle',
             wordStyle: {
                 rotation: [-Math.PI / 2, Math.PI / 2],
                 rotateRatio: 0.5,
                 rotationSteps: 4,
-                fontSize: [20, 60],
+                fontSize: [20, 50],
                 color: (word, weight) => {
                     return this.getRandomColor();
                 },
@@ -451,7 +451,8 @@ class Home extends Component {
                         <Col span={15}>
                             <h3 style={{marginTop: '20px', fontWeight: 'normal', textAlign: 'left'}}>
                                 <span id="teamcity"></span>
-                                {this.state.archives.length} Articles in {new Date().getFullYear()}
+                                <span style={{fontWeight: '500'}}>{this.state.archives.length}</span> Articles
+                                in {new Date().getFullYear()}
                             </h3>
                             <ul id="activities">
                                 <li>
@@ -523,7 +524,7 @@ class Home extends Component {
                         </Col>
                         <Col span={10}>
                             <div id="archives">
-                                <h3>
+                                <h3 style={{fontSize: '1.3em'}}>
                                     <Icon type="smile"/>
                                     Discovery
                                 </h3>
@@ -532,7 +533,7 @@ class Home extends Component {
                                     itemLayout="vertical"
                                     size="large"
                                     pagination={{
-                                        pageSize: 5,
+                                        pageSize: 7,
                                     }}
                                     dataSource={this.state.archives}
                                     renderItem={item => (
@@ -562,16 +563,16 @@ class Home extends Component {
                         <Col span={2}></Col>
                         <Col span={6}>
                             <div id="essays">
-                                <h3>
+                                <h3 style={{fontSize: '1.3em'}}>
                                     <Icon type="unordered-list"/>
                                     Statistic
                                 </h3>
                                 <Divider dashed/>
-                                <div id='categoryCanvas' style={{marginTop: '20px'}}></div>
+                                <div id='categoryCanvas'></div>
                             </div>
 
                             <div id="essays">
-                                <h3>
+                                <h3 style={{fontSize: '1.3em'}}>
                                     <Icon type="unordered-list"/>
                                     Category
                                 </h3>

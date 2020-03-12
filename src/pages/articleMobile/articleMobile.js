@@ -37,6 +37,8 @@ class ArticleMobile extends Component {
                     $('td').addClass('mobileArticleT')
                     $('th').addClass('mobileArticleT')
                     $('table').addClass('mobileArticleT')
+                    $('blockquote').addClass('mobileArticleBlockQuote')
+                    $('code').addClass('mobileArticleCode')
                     $('img').attr('src', loadingURL)
                     $('img').addClass('autoFlip')
                     $('img').css('max-width', '80vw')

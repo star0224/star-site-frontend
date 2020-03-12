@@ -95,7 +95,7 @@ class StarStatistic extends Component {
                         categoryNum
                     })
                     const data = this.state.categoryNum
-                    const categoryPlot = new Column('categoryCanvas', {
+                    const categoryPlot = new Column('statisticCanvas', {
                         data,
                         xField: 'categoryName',
                         yField: 'num',
@@ -187,6 +187,12 @@ class StarStatistic extends Component {
                     </Col>
                     <Col span={5}>
                         <Card style={{background: 'linear-gradient(to right, rgb(28, 216, 210), rgb(147, 237, 199))'}}
+                              onClick={() => {
+                                  notification.open({
+                                      message: '暂无漏洞',
+                                      description: '0 Error, 0 Bug'
+                                  })
+                              }}
                               className="statisticCard" hoverable bordered={false}>
                             <Row>
                                 <Col span={21}>
@@ -202,6 +208,13 @@ class StarStatistic extends Component {
                     <Col span={5}>
                         <Card
                             style={{background: 'linear-gradient(to right, rgb(229, 57, 53), rgb(227, 93, 91))'}}
+                            onClick={() => {
+                                if (this.state.isBack !== true) {
+                                    this.props.history.push('/views');
+                                } else {
+                                    this.props.history.push('/bk/views');
+                                }
+                            }}
                             className="statisticCard" hoverable bordered={false}>
                             <Row>
                                 <Col span={21}>
@@ -217,7 +230,7 @@ class StarStatistic extends Component {
                 </Row>
                 <Row type="flex" justify="center" style={{marginTop: '60px'}}>
                     <Col span={20} style={{backgroundColor: '#fff', borderRadius: '10px'}}>
-                        <div id="categoryCanvas"></div>
+                        <div id="statisticCanvas"></div>
                     </Col>
                 </Row>
             </div>

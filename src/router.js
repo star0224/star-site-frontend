@@ -6,11 +6,13 @@ import {loginInfo} from "./config";
 import loadable from "./utils/loadable";
 import App from "./App";
 // import VocabularyListFront from "./pages/vocabularyListFront/vocabularyListFront";
-// import ArticleMobile from "./pages/articleMobile/articleMobile";
-// import Version from "./pages/version/version";
 // import CategoryList from "./pages/categoryList/categoryList";
 // import Archive from "./pages/archive/archive";
+// import VocabularyInfo from "./pages/vocabularyInfo/vocabularyInfo";
 // import ArticleInfo from "./components/ArticleInfo/ArticleInfo";
+
+// import ArticleMobile from "./pages/articleMobile/articleMobile";
+// import Version from "./pages/version/version";
 // import HomeBack from "./pages/homeBack/homeBack";
 // import ArticleAdd from "./pages/article/articleAdd/articleAdd";
 // import CategoryAddBack from "./pages/categoryBack/categoryAddBack/categoryAddBack";
@@ -20,19 +22,24 @@ import App from "./App";
 // import NoMatchMobile from "./pages/404Mobile/noMatchMobile";
 // import Navigation from "./components/Navigation/Navigation";
 // import Home from "./pages/home/home";
-// import VocabularyInfo from "./pages/vocabularyInfo/vocabularyInfo";
 // import VocabularyAdd from "./pages/vocabularyAdd/vocabularyAdd";
 // import VocabularyListBack from "./pages/vocabularyListBack/vocabularyListBack";
+// import BackViews from "./pages/backViews/backViews";
+// import Views from "./pages/views/views";
 
-const Home = loadable(() => import('./pages/home/home'))
+
 const CategoryList = loadable(() => import('./pages/categoryList/categoryList'))
 const Archive = loadable(() => import('./pages/archive/archive'))
+const ArticleInfo = loadable(() => import('./components/ArticleInfo/ArticleInfo'))
+const VocabularyListFront = loadable(() => import('./pages/vocabularyListFront/vocabularyListFront'))
+const VocabularyInfo = loadable(() => import('./pages/vocabularyInfo/vocabularyInfo'))
+
+const Home = loadable(() => import('./pages/home/home'))
 const CategoryListBack = loadable(() => import('./pages/categoryBack/categoryListBack/categoryListBack'))
 const CategoryAddBack = loadable(() => import('./pages/categoryBack/categoryAddBack/categoryAddBack'))
 const NoMatch = loadable(() => import('./pages/404/noMatch'))
 const HomeBack = loadable(() => import('./pages/homeBack/homeBack'))
 const ArticleAdd = loadable(() => import('./pages/article/articleAdd/articleAdd'))
-const ArticleInfo = loadable(() => import('./components/ArticleInfo/ArticleInfo'))
 const Navigation = loadable(() => import('./components/Navigation/Navigation'))
 const HomeMobile = loadable(() => import('./pages/homeMobile/homeMobile'))
 const NoMatchMobile = loadable(() => import('./pages/404Mobile/noMatchMobile'))
@@ -40,8 +47,9 @@ const Version = loadable(() => import('./pages/version/version'))
 const ArticleMobile = loadable(() => import('./pages/articleMobile/articleMobile'))
 const VocabularyAdd = loadable(() => import('./pages/vocabularyAdd/vocabularyAdd'))
 const VocabularyListBack = loadable(() => import('./pages/vocabularyListBack/vocabularyListBack'))
-const VocabularyListFront = loadable(() => import('./pages/vocabularyListFront/vocabularyListFront'))
-const VocabularyInfo = loadable(() => import('./pages/vocabularyInfo/vocabularyInfo'))
+const BackViews = loadable(() => import('./pages/backViews/backViews'))
+const Views = loadable(() => import('./pages/views/views'))
+
 
 export default class Router extends Component {
 
@@ -82,6 +90,7 @@ export default class Router extends Component {
                             <Route path="/article/:id" component={ArticleInfo}/>
                             <Route path="/vocabulary" component={VocabularyListFront}/>
                             <Route path="/vocabularyInfo/:id" component={VocabularyInfo}/>
+                            <Route path="/views" component={Views} />
                             <PrivateRoute path="/bk">
                                 <Switch>
                                     <Route exact path="/bk" component={HomeBack}/>
@@ -94,6 +103,7 @@ export default class Router extends Component {
                                     <Route path="/bk/vocabulary/add/new" component={VocabularyAdd}/>
                                     <Route path="/bk/vocabulary/add/:id" component={VocabularyAdd}/>
                                     <Route path="/bk/vocabulary/list" component={VocabularyListBack}/>
+                                    <Route path="/bk/views" component={BackViews} />
                                     <Route component={NoMatch}/>
                                 </Switch>
                             </PrivateRoute>

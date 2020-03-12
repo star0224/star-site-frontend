@@ -55,6 +55,9 @@ class ArticleInfo extends Component {
                     $('table').addClass('articleTable')
                     $('th').addClass('articleThTd')
                     $('td').addClass('articleThTd')
+                    $('code').addClass('articleCode')
+                    $('pre').addClass('articlePre')
+                    $('blockquote').addClass('articleBlockQuote')
                     $('#articleInfo').children('div:first-child').children('div:first-child').children('div:nth-child(2)').width($('#articleInfo').children('div:first-child').children('div:first-child').width())
                     let articleAnchor = $('#articleInfo').children('div').children('div:first-child').children('div:nth-child(2)')
                     let articleAnchorDOM = $('#articleInfo').children('div').children('div:first-child').children('div:nth-child(2)')[0]
@@ -122,6 +125,9 @@ class ArticleInfo extends Component {
         $('table').removeClass('articleTable')
         $('th').removeClass('articleThTd')
         $('td').removeClass('articleThTd')
+        $('blockquote').removeClass('articleBlockQuote')
+        $('code').removeClass('articleCode')
+        $('pre').removeClass('articlePre')
     }
 
     generatorAnchor = () => {
@@ -314,7 +320,7 @@ class ArticleInfo extends Component {
                                         </span>
                                         <span style={{marginLeft: '30px'}}>
                                             <Icon type="book" style={{marginRight: '5px'}}/>
-                                            预计阅读时间：{Number.parseInt(this.state.article.wordCount / 500)} 分钟
+                                            预计阅读时间：{Number.parseInt(this.state.article.wordCount / 300)} 分钟
                                         </span>
                                     </div>
                                 </div>

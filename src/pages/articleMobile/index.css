@@ -58,6 +58,20 @@
     margin: 0 0 0.6em;
 }
 
+.mobileArticleBlockQuote {
+    margin: 0;
+    margin-bottom: 0.6em;
+    padding: 0 1em;
+    color: #6a737d;
+    border-left: 0.25em solid #dfe2e5;
+}
+.mobileArticleCode {
+    padding: 0.2em 0.4em;
+    margin: 0;
+    background-color: #f0f0f0;
+    border-radius: 3px;
+}
+
 .autoFlip {
     -webkit-animation: flip 2s linear 0s infinite;
 }

@@ -101,6 +101,14 @@ class NavigationBack extends Component {
                         </NavLink>
                     </Menu.Item>
                 </SubMenu>
+                <Menu.Item key="backViews">
+                    <NavLink to="/bk/views">
+                        <span>
+                            <Icon type="eye"/>
+                            <span>访客</span>
+                        </span>
+                    </NavLink>
+                </Menu.Item>
             </Menu>
         );
     }

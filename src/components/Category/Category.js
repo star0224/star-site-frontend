@@ -5,7 +5,6 @@ import {NavLink, withRouter} from "react-router-dom";
 import Highlighter from 'react-highlight-words';
 import './index.css'
 import $ from 'jquery'
-import Footer from "../Footer/Footer";
 
 
 class Category extends Component {

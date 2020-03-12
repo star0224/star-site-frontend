@@ -26,6 +26,9 @@ class Navigation extends Component {
                 })
                 break;
             default:
+                this.setState({
+                    current: e.key,
+                })
                 break;
         }
     }
@@ -95,6 +98,11 @@ class Navigation extends Component {
                         </NavLink>
                     </Menu.Item>
                 </SubMenu>
+                <Menu.Item key="views">
+                    <NavLink to="/views">
+                        访客
+                    </NavLink>
+                </Menu.Item>
                 <Menu.Item key="archive">
                     <NavLink to="/archive">
                         统计

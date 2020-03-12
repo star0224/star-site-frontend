@@ -107,7 +107,7 @@
 }
 
 #essays > div:nth-child(2) {
-    margin-bottom: 10px;
+    margin-bottom: 0px;
 }
 
 #essays > div:nth-child(3) > div > div > ul > li > div {
@@ -333,3 +333,7 @@
     background-color: #87CEFA;
 }
 
+.ant-list-vertical .ant-list-item-meta-title {
+    font-size: 20px;
+    font-weight: bold;
+}
